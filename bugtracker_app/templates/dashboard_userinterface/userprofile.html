@@ -1,0 +1,96 @@
+{% extends 'dashboard_userinterface/base_dashboard.html' %}
+{% load static %}
+
+ {% block styles %}
+    <link rel="stylesheet" href="{% static 'css/userprofile.css' %}">
+
+    {% endblock %}
+
+{% block content %}
+<div class="user-profile-form ">
+    <div class="form-container">
+        <div class="account-management-column ">
+            <p class="lead">Our Client (Job Role)</p>
+            <div class="profile-photo-section text-center">
+                <img src="{{ user.profile_picture_url }}" alt="user-profile-pic" class="user-avatar-large" id="profile-pic">
+                <button class="upload-btn btn btn-primary"><label for="input-file" style="color: white;">Upload Photo</label></button>
+                <input type="file" accept="image/jpeg, image/png, image/jpg" id="input-file">
+
+                <form action="/update_profile/" method="POST" enctype="multipart/form-data">
+                 <input type="file" accept="image/jpeg, image/png, image/jpg" id="input-file" name="profile_picture">
+                <button type="button" class="btn btn-outline-primary">Save changes</button>
+                </form>
+            </div>
+            <div class="password-fields">
+                <label for="old-password">Old Password</label>
+                <input type="password" id="old-password" value="********" readonly>
+
+                <label for="new-password">New Password</label>
+                <input type="password" id="new-password">
+
+                <button class="change-password-btn btn btn-primary">Change Password</button>
+            </div>
+        </div>
+
+        <div class="profile-info-column">
+            <div class="form-header">
+                <p class="lead fs-3">Profile Information</p>
+            </div>
+            <div class="form-grid row">
+                <div class="form-group">
+                    <label for="username">Username</label>
+                    <input type="text" id="username" value="johnson_j">
+                </div>
+                <div class="form-group">
+                    <label for="full-name">Full Name</label>
+                    <input type="text" id="full-name" value="Johnson">
+                </div>
+                <div class="form-group">
+                    <label for="role">Role</label>
+                    <input type="text" id="role" value="Client" readonly>
+                </div>
+               
+                <div class="form-group">
+                    <label for="display-name">Company Name</label>
+                    <input type="text" id="display-name" value="Github Inc.">
+                </div>
+            </div>
+
+            <div class="form-header">
+                <p class="fs-3">Contact Info</p>
+            </div>
+            <div class="form-grid two-columns">
+                <div class="form-group">
+                    <label for="email">Email (required)</label>
+                    <input type="email" id="email" value="johnson@example.com">
+                </div>
+                <div class="form-group">
+                    <label for="phone-number">Phone Number</label>
+                    <input type="text" id="phone-number" value="+1 (555) 123-4567">
+                </div>
+                <div class="form-group">
+                    <label for="website">Website</label>
+                    <input type="text" id="website" value="www.johnson.com">
+                </div>
+                <div class="form-group">
+                    <label for="location">Location</label>
+                    <input type="text" id="location" value="Mandalay">
+                </div>
+            </div>
+
+            <div class="form-header">
+                <p class="lead fs-3">About the User</p>
+            </div>
+            <div class="form-group full-width">
+                <label for="bio">Biographical Info</label>
+                <textarea id="bio" rows="4">My name is Johnson and I'm a client here.</textarea>
+            </div>
+        </div>
+    </div>
+</div>
+   {% endblock %}
+
+   {% block extra_js %}
+        <script src="{% static 'js/profile-upload-image.js' %}"></script>
+        
+    {% endblock %}

@@ -1,0 +1,22 @@
+{% load static %}
+<div class="header">
+    <div class="header-title">
+    
+        <a href="{% url 'home' %}" style="text-decoration: none;color: #2583D6;"><i class="ri-bug-line"></i>
+            <!-- <img src="{% static 'images/sitelogo.png' %}" alt="Bug Tracker Logo" width="60px"  style="border-radius: 50px;"> -->
+        <span>BUG TRACKER</span>
+        </a>
+    </div>
+    <div class="user-info">
+        <div class="user-details">
+            <div class="user-name">{{ username }}</div>
+            <div class="user-role">Developer</div>
+        </div>
+        <a href="{% url 'profile' %}" class="profile-link">
+            <div class="user-avatar" style="background-image: url('/static/images/avatar.png');"></div>
+        </a>
+    </div>
+    
+</div>
+
+

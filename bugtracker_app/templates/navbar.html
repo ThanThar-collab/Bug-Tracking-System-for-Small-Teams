@@ -1,0 +1,26 @@
+{% load static %}
+<!-- Header -->
+    <nav class="navbar navbar-expand-lg sticky-top">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="{% url 'home' %}">
+                <img src="{% static 'images/sitelogo.png' %}" alt="Bug Tracker Logo" width="50px"  style="border-radius: 50px;"> 
+                <span class="fw-bold" style="font-size: 1.8rem; color: rgb(92, 92, 218);font-family: Arial, Helvetica, sans-serif;">
+                Bug Tracker
+                </span>
+            </a>
+            <div class="d-flex ms-auto">
+
+                <!-- <a href="{% url 'login' %}" class="btn btn-outline-primary btn-bh me-2">Log in</a> -->
+                
+                <a href="{% url 'user_register_select' %}" class="btn reg-btn btn-bh" style=" background: linear-gradient(135deg, rgba(92,92,218,1) 0%, rgba(132,132,230,1) 100%);
+                  border-radius: 20px;
+                  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+                  color: white;
+                  font-weight: bold;
+                  padding: 12px 30px;
+                  text-transform: uppercase;
+                  border: none;
+                  transition: all 0.3s ease;">Register</a>
+            </div>
+        </div>
+    </nav>

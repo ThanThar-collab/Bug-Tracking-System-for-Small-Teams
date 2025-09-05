@@ -1,0 +1,59 @@
+{% extends 'dashboard_userinterface/base_dashboard.html' %}
+
+{% load static %}
+
+{% block styles %}
+<link rel="stylesheet" href="{% static 'css/dashboard.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid p-3">
+    <!-- Header Div -->
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2 class="h4">Bugs</h2>
+       
+        <a href="{% url 'bugreportform' %}" class="btn btn-primary addbug-btn">
+            <i class="bi bi-plus-circle"></i> Add Bug
+        </a>
+    </div>
+
+    <!-- Responsive Table -->
+    <div class="table-responsive shadow-sm" >
+        <table class="table table-hover align-middle mb-0">
+            <thead class="table-primary" style="height: 40px;">
+                <tr>
+                    <th>ID</th>
+                    <th>Title</th>
+                    <th>Status</th>
+                    <th>Assignee</th>
+                    <th>Reporter</th>
+                    <th>Desired_Date</th>
+                    <th class="text-center">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for bug in bugs %}
+                <tr>
+                    <td>{{ bug.id }}</td>
+                    <td>{{ bug.title}}</td>
+                    <td>{{ bug.status }}</td>
+                    <td>{{ bug.assigned_to }}</td>
+                    <td>{{ bug.reported_by }}</td>
+                    <td>{{ bug.desired_date }}</td>
+                    <td class="text-center">
+                        <div class="btn-group btn-group-sm" role="group">
+                            <a href="{% url 'bugdetail_pdf' %}" class="btn btn-primary">View Detail</a>
+                        </div>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'js/dashboard.js' %}"></script>
+<script src="{% static 'js/bugStatus.js' %}"></script>
+{% endblock %}

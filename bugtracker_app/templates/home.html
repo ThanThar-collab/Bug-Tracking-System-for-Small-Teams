@@ -1,0 +1,323 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block styles %}
+<link rel="stylesheet" href="{% static 'css/dashboard.css' %}">
+{% endblock %}
+
+{% block content %}
+    <!-- Hero Section -->
+    <section class="hero" >
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-6 order-lg-1 order-1">
+                    <h1>Streamline Bug Tracking for Your Team – <span class="hero-highlight">Clean, intuitive interface</span></h1>
+                    <p>Our platform empowers teams to report, assign, and monitor bugs in real-time. All data is securely stored and easily managed through our web-based interface.</p>
+                    
+                    <div class="signup-options">
+                        <button class="btn btn-google btn-bh w-100 mb-3">
+                            <img src="{% static 'images/googlelogo.png' %}" alt="Google Logo" width="18">
+                            <span class="ms-2">Continue with Google</span>
+                        </button>
+                        <div class="text-center mb-3">
+                            <a href="#" class="text-decoration-none text-primary fw-medium">Or sign up with email <i class="fas fa-arrow-right ms-1"></i></a>
+                        </div>
+                        <div class="d-flex align-items-center justify-content-center">
+                            <i class="fas fa-check-circle text-success me-2"></i>
+                            <span class="text-dark">No credit card required</span>
+                        </div>
+                    </div>
+                </div>
+                  <div class="col-lg-6 order-lg-2 order-2 mb-4 mb-lg-0">
+                    <div class="hero-image">
+                       
+                            <video class="img-fluid rounded-3" style="border: 3px solid #ffffff;width: 100%; height: 400px; object-fit: fill" autoplay muted loop>
+                            <source src="{% static 'videos/bugcover.mp4' %}" type="video/mp4">
+                            Your browser does not support the video tag.
+                         
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+    </section>
+
+    
+    <section class="overview-dashboard w-100 h-100" >
+        <div class="letterimage-container row">
+    <!-- Left Section -->
+    <div class="left-item">
+      <h2 class="fs-1 lead text-white">Tired of chaotic bug reports scattered across emails and spreadsheets?</h2><br>
+      <p class="fs-5 text-white" style="text-align: center;" >
+        Our Bug Tracking System for Small Teams offers a sleek, intuitive dashboard designed to bring order to your development process. With real-time updates, role-based views, and powerful filtering, your team can track, assign, and resolve issues faster than ever. Admins gain full control, developers focus on fixes, and testers report bugs seamlessly—all in one centralized hub. Boost productivity, reduce clutter, and ship better code. Try it today and turn debugging chaos into clarity!
+      </p>
+    </div>
+
+    <!-- Right Section -->
+    <div class="right-item col-md-0">
+      <img src="{% static 'images/bugreportform.png' %}" alt="Client View Bug Report Form"  >
+    </div>
+  </div>
+    </section>
+
+      <section class="overview-dashboard w-100 h-100" >
+        <div class="letterimage-container row">
+    <!-- Left Section -->
+
+    <!-- Right Section -->
+    <div class="left-sw col-md-0">
+      <img src="{% static 'images/bugstatus.png' %}" alt="Bug Status Table for clients"  >
+    </div>
+
+      <div class="right-sw">
+      <h2 class="fs-1 lead text-white text-center">See Progress in Bug Status Form</h2><br>
+      <p class="fs-5 text-white" style="text-align: center;" >
+        Our real-time Status Tracker shows every issue's journey from Open → Fixed in one dashboard. Developers update with one click, managers track progress instantly, and nothing slips through the cracks. Spend less time asking "what's fixed?" and more time building.
+      </p>
+    </div>
+  </div>
+    </section>
+
+    <!-- Tagline Section -->
+    <section class="tagline-section">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-lg-8 text-center">
+                    <p class="tagline-text">Tired of losing customers to glitches? We track, tag, and terminate bugs — so you don't lose business.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features">
+        <div class="container">
+            <div class="section-title">
+                <h2 >Powerful features for seamless bug tracking</h2>
+                <p class="text-muted">Everything you need to manage bugs efficiently and collaborate with your team</p>
+            </div>
+            
+            <div class="row mt-4">
+                <!-- Panel 1: Customer Feedback Hub -->
+                <div class="col-lg-4 mb-4">
+                    <div class="panel-card h-100">
+                        <img src="https://images.unsplash.com/photo-1551836022-d5d88e9218df?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" 
+                             class="card-img-top" 
+                             alt="Customer Feedback Hub">
+                        <div class="card-body">
+                            <h3 class="card-title">Customer Feedback Hub</h3>
+                            <p class="card-text">
+                                Explore past bug reports and client feedback to improve your product. 
+                                See how issues were resolved and learn from our tracking history.
+                            </p>
+                            <a href="#" class="btn-explore" style="color: rgb(92, 92, 218);">
+                                View Feedback <i class="fas fa-arrow-right ms-1"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Panel 2: About Our Team -->
+                <div class="col-lg-4 mb-4">
+                    <div class="panel-card h-100">
+                        <img src="https://images.unsplash.com/photo-1571260899304-425eee4c7efc?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" 
+                             class="card-img-top" 
+                             alt="Our Team">
+                        <div class="card-body">
+                            <h3 class="card-title">About Our Team</h3>
+                            <p class="card-text">
+                                Meet the experts behind our bug tracking system. 
+                                Learn about our mission, values, and how to contact us.
+                            </p>
+                            <a href="{% url 'about' %}" class="btn-explore" style="color: rgb(92, 92, 218);">
+                                Meet the Team <i class="fas fa-arrow-right ms-1"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Panel 3: Integration Guide -->
+                <div class="col-lg-4 mb-4">
+                    <div class="panel-card h-100">
+                        <img src="https://images.unsplash.com/photo-1555066931-4365d14bab8c?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" 
+                             class="card-img-top" 
+                             alt="Integration Guide">
+                        <div class="card-body">
+                            <h3 class="card-title">Integration Guide</h3>
+                            <p class="card-text">
+                                Connect with your favorite tools. Step-by-step guides for Jira, 
+                                Slack, GitHub and other popular development platforms.
+                            </p>
+                            <a href="{% url 'newpage' %}" class="btn-explore" style="color: rgb(92, 92, 218);">
+                                Explore Integrations <i class="fas fa-arrow-right ms-1"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Feature Cards -->
+            <div class="row mt-5">
+                <div class="col-6 col-lg-3 mb-4">
+                    <div class="feature-card">
+                        <div class="feature-icon bg-blue">
+                            <i class="fas fa-mouse-pointer"></i>
+                        </div>
+                        <h4>In-context feedback</h4>
+                        <p>Clients drop a pin to show feedback in context.</p>
+                    </div>
+                </div>
+                <div class="col-6 col-lg-3 mb-4">
+                    <div class="feature-card">
+                        <div class="feature-icon bg-purple">
+                            <i class="fas fa-camera"></i>
+                        </div>
+                        <h4>Automatic screenshots</h4>
+                        <p>Get a screenshot and all the technical details.</p>
+                    </div>
+                </div>
+                <div class="col-6 col-lg-3 mb-4">
+                    <div class="feature-card">
+                        <div class="feature-icon bg-green">
+                            <i class="fas fa-tasks"></i>
+                        </div>
+                        <h4>Task tracking</h4>
+                        <p>Turn every comment into a clear next step.</p>
+                    </div>
+                </div>
+                <div class="col-6 col-lg-3 mb-4">
+                    <div class="feature-card">
+                        <div class="feature-icon bg-orange">
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <h4>Client collaboration</h4>
+                        <p>Tackle each task in a separate conversation.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <!-- Testimonials Section -->
+    <section class="testimonials">
+        <div class="container">
+            <div class="section-title">
+                <h2>But don't just take our word for it</h2>
+                <p class="text-muted">Customers love using our bug tracking platform</p>
+            </div>
+            
+            <div class="row g-4 mb-5">
+                <div class="col-md-4">
+                    <div class="stats-card">
+                        <div class="stats-number">94%</div>
+                        <p>of users report improved client satisfaction</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="stats-card">
+                        <div class="stats-number">93%</div>
+                        <p>of users report reduced time to delivery</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="stats-card">
+                        <div class="stats-number">95%</div>
+                        <p>of users say they're delivering higher quality products</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="row g-4">
+                <div class="col-md-4">
+                    <div class="testimonial-card">
+                        <div class="testimonial-header">
+                            <div class="testimonial-avatar">
+                                <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="User">
+                            </div>
+                            <div>
+                                <h5 class="mb-0">Michael G</h5>
+                                <p class="text-muted mb-0">Head of Development</p>
+                            </div>
+                        </div>
+                        <div class="testimonial-rating">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                        </div>
+                        <p>"Our clients love to be able to see the progress of their feedback and it's great that it's in real time."</p>
+                    </div>
+                </div>
+                
+                <div class="col-md-4">
+                    <div class="testimonial-card">
+                        <div class="testimonial-header">
+                            <div class="testimonial-avatar">
+                                <img src="https://randomuser.me/api/portraits/women/44.jpg" alt="User">
+                            </div>
+                            <div>
+                                <h5 class="mb-0">Ashley Groenveld</h5>
+                                <p class="text-muted mb-0">Project Manager</p>
+                            </div>
+                        </div>
+                        <div class="testimonial-rating">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                        </div>
+                        <p>"I use BugHerd all day every day. It has sped up our implementation tenfold."</p>
+                    </div>
+                </div>
+                
+                <div class="col-md-4">
+                    <div class="testimonial-card">
+                        <div class="testimonial-header">
+                            <div class="testimonial-avatar">
+                                <img src="https://randomuser.me/api/portraits/men/22.jpg" alt="User">
+                            </div>
+                            <div>
+                                <h5 class="mb-0">Andrew M</h5>
+                                <p class="text-muted mb-0">Developer</p>
+                            </div>
+                        </div>
+                        <div class="testimonial-rating">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                        </div>
+                        <p>"We love letting our clients use it as a way of posting issues and bugs and we can triage them and assign to developers."</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <!-- <section class="cta-section">
+        <div class="container">
+            <h2>Get a bug tracking process that just works</h2>
+            <p>If you're not satisfied within 30 days of purchase, contact us and we'll refund your subscription.</p>
+            <div class="d-flex flex-wrap justify-content-center">
+                <button class="btn btn-light btn-lg">
+                    <i class="fab fa-google me-2"></i> Continue with Google
+                </button>
+                <button class="btn btn-outline-light btn-lg">
+                    Or sign up with email
+                </button>
+            </div>
+        </div>
+    </section> -->
+
+  {% endblock %}
+
+      {% block extra_js %}
+        <script src="{% static 'js/home.js' %}"></script>
+    {% endblock %}

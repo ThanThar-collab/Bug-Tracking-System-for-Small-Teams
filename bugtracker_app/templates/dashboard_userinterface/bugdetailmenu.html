@@ -1,0 +1,189 @@
+{% extends 'dashboard_userinterface/base_dashboard.html' %}
+{% load static %}
+
+ {% block styles %}
+    <link rel="stylesheet" href="{% static 'css/bugdetailmenu.css' %}">
+
+    {% endblock %}
+
+{% block content %}
+      <div class="container-wrapper">
+       
+        <div class="row">
+            <!-- Left Column -->
+            <div class="col-lg-8">
+                <div class="card">
+                    <div class="card-header">Bug Data</div>
+                    <div class="card-body">
+                        <div class="mb-4">
+                            <label for="bug-title" class="form-label">Bug Title</label>
+                            <input type="text" id="bug-title" class="form-control" value="chit tl">
+                        </div>
+                        
+                        <div class="mb-4">
+                            <h3 class="subtitle">Environment</h3>
+                            <p>None</p>
+                        </div>
+                        
+                        <div>
+                            <h3 class="subtitle">Confluence content</h3>
+                            <div class="task-item">
+                                <div class="task-checkbox">
+                                    <input type="checkbox" class="form-check-input">
+                                </div>
+                                <div class="task-content">
+                                    <p class="task-text">Known errors</p>
+                                    <div class="nested-content">
+                                        <strong>TRY TEMPLATE</strong>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-header">Activity</div>
+                    <div class="card-body">
+                        <div class="task-item">
+                            <div class="task-checkbox">
+                                <input type="checkbox" class="form-check-input" checked>
+                            </div>
+                            <div class="task-content">
+                                <p class="task-text">Add a comment...</p>
+                                <div class="nested-content">
+                                    Who is working on this...? Can I get more info...? Status update...
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="pro-tip">
+                            <strong>Pro tip:</strong> press <strong>M</strong> to comment
+                        </div>
+                        
+                        <div class="comment-section">
+                            <h3 class="subtitle">Add Comment</h3>
+                            <div class="comment-input">
+                                <textarea class="form-control" rows="3" placeholder="Write a comment..."></textarea>
+                                <button class="btn btn-primary">Comment</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Right Column -->
+            <div class="col-lg-4">
+                <div class="card">
+                    <div class="card-header">Bug Info</div>
+                    <div class="card-body">
+                        <div class="bug-info">
+                            <div class="bug-info-item">
+                                <div class="bug-info-label">Status:</div>
+                                <div>Open</div>
+                            </div>
+                            <div class="bug-info-item">
+                                <div class="bug-info-label">Priority:</div>
+                                <div>Medium</div>
+                            </div>
+                            <div class="bug-info-item">
+                                <div class="bug-info-label">Assignee:</div>
+                                <div>Unassigned</div>
+                            </div>
+                            <div class="bug-info-item">
+                                <div class="bug-info-label">Reporter:</div>
+                                <div>Professor Zaman</div>
+                            </div>
+                            <div class="bug-info-item">
+                                <div class="bug-info-label">Created:</div>
+                                <div>Today</div>
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <h3 class="subtitle">Pinning Options</h3>
+                            <p class="text-muted">Select fields to pin to the top of the bug view</p>
+                            
+                            <div class="pinned-options">
+                                <div class="pinned-option">Assignee</div>
+                                <div class="pinned-option active">Priority</div>
+                                <div class="pinned-option">Due Date</div>
+                                <div class="pinned-option">Labels</div>
+                                <div class="pinned-option">Environment</div>
+                                <div class="pinned-option">Reporter</div>
+                            </div>
+                            
+                            <div class="d-flex justify-content-between mt-3">
+                                <button class="btn btn-outline-secondary">Reset</button>
+                                <button class="btn btn-primary">Save Changes</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-header">To Do</div>
+                    <div class="card-body">
+                        <div class="task-item">
+                            <div class="task-checkbox">
+                                <input type="checkbox" class="form-check-input" checked>
+                            </div>
+                            <div class="task-content">
+                                <p class="task-text">Improve Bug</p>
+                                <div class="nested-content">
+                                    <strong>Pinned fields</strong><br>
+                                    Click on the ⋮ next to a field label to start pinning.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-header">Details</div>
+                    <div class="card-body">
+                        <div class="task-item">
+                            <div class="task-checkbox">
+                                <input type="checkbox" class="form-check-input" checked>
+                            </div>
+                            <div class="task-content">
+                                <p class="task-text">Unassigned</p>
+                                <div class="details-grid">
+                                    <div class="detail-label">Assignee</div>
+                                    <div><a class="action-link">Assign to me</a></div>
+                                    
+                                    <div class="detail-label">Reporter</div>
+                                    <div>Professor Zaman</div>
+                                    
+                                    <div class="detail-label">Labels</div>
+                                    <div><a class="action-link">Add labels</a></div>
+                                    
+                                    <div class="detail-label">Due date</div>
+                                    <div><a class="action-link">Add due date</a></div>
+                                    
+                                    <div class="detail-label">Start date</div>
+                                    <div><a class="action-link">Add date</a></div>
+                                    
+                                    <div class="detail-label">Priority</div>
+                                    <div><span class="priority-indicator">= Medium</span></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+   {% endblock %}
+     {% block extra_js %}
+    <script>
+     
+       
+        document.querySelectorAll('.pinned-option').forEach(option => {
+            option.addEventListener('click', function() {
+                this.classList.toggle('active');
+            });
+        });
+    </script>
+
+ {% endblock %}

@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Login For Clients{% endblock %}
+
+{% block content %}
+
+{% block styles %}
+<link rel="stylesheet" href="{% static 'css/registration.css' %}">
+{% endblock %}
+
+<div class="register-container" id="container">
+  <div class="form-container sign-in-container">
+    <form method="POST" action="{% url 'login' %}">
+      {% csrf_token %}
+      <h1 style="color:  rgb(92, 92, 218); text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);">BugTracker Login</h1>
+ 
+      <!-- Username or Email -->
+      <input type="text" name="username" placeholder="Username or Email" required />
+
+      <!-- Password -->
+      <input type="password" name="password" placeholder="Password" required />
+
+      <!-- Footer -->
+      <div class="form-footer">
+        <label><input type="checkbox" /> Remember me</label>
+        <a href="#">Forgot password?</a>
+      </div>
+
+      <!-- Submit Button -->
+      <button type="submit">Login</button>
+    </form>
+  </div>
+  <div class="overlay-container">
+    <div class="overlay">
+      <div class="overlay-panel overlay-right">
+        <h1>Start your journey now</h1>
+        <p>If you don't have an account yet, join us and start your journey.</p>
+        <a href="{% url 'signup' %}"><button class="ghost" id="signUp">Register</button></a>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'js/script.js' %}"></script>
+{% endblock %}

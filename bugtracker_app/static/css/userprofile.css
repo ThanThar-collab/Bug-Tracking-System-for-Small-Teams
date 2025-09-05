@@ -1,0 +1,156 @@
+
+.user-profile-form {
+    max-width: 1200px;
+    margin: 40px auto;
+    background-color: var(--card-bg);
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    padding: 30px;
+}
+
+.form-container {
+    display: flex;
+    gap: 40px;
+}
+
+/* Column styling */
+.account-management-column {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+    padding-right: 30px;
+    border-right: 1px solid var(--border-color);
+}
+
+.profile-info-column {
+    flex: 2;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    padding-left: 10px;
+}
+
+/* Heading and section styling */
+h3 {
+    color: var(--text-primary);
+    font-weight: 600;
+    font-size: 1.5rem;
+}
+
+.form-header {
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 10px;
+}
+
+/* Profile Photo Section */
+.profile-photo-section {
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+}
+
+.user-avatar-large {
+    width: 100%;
+    background-color: var(--gray-light);
+    border-radius: 8px;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    display: block;
+    min-height: 300px;
+}
+
+
+
+/* Password and Form Fields */
+.password-fields {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.change-password-btn{
+    padding: 10px 20px;
+    background-color: var(--accent-color);
+    color: white;
+    border: none;
+    cursor: pointer;
+    border-radius: 4px;
+    font-weight: 500;
+}
+
+/* Form Grid Layout */
+.form-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+}
+
+label {
+    margin-bottom: 5px;
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+}
+
+input[type="file"]{
+    display: none;
+}
+
+input[type="text"],
+input[type="email"],
+input[type="password"],
+textarea {
+    padding: 10px 12px;
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    font-size: 1rem;
+    color: var(--text-primary);
+    background-color: var(--primary-bg);
+    width: 100%;
+}
+
+input[readonly] {
+    background-color: var(--sidebar-bg);
+    cursor: not-allowed;
+}
+
+textarea {
+    resize: vertical;
+}
+
+/* Full width form group */
+.form-group.full-width {
+    grid-column: 1 / -1;
+}
+
+/* Responsive design for smaller screens */
+@media (max-width: 992px) {
+    .form-container {
+        flex-direction: column;
+    }
+
+    .account-management-column {
+        padding-right: 0;
+        border-right: none;
+        border-bottom: 1px solid var(--border-color);
+        padding-bottom: 30px;
+    }
+
+    .profile-info-column {
+        padding-left: 0;
+    }
+}
+
+@media (max-width: 576px) {
+    .form-grid {
+        grid-template-columns: 1fr;
+    }
+}

@@ -1,0 +1,169 @@
+   :root {
+            --primary: #3a86ff;
+            --primary-dark: #2667cc;
+            --secondary: #ff006e;
+            --dark: #2b2d42;
+            --light: #f8f9fa;
+            --gray: #e9ecef;
+            --success: #06d6a0;
+            --warning: #ffd166;
+            --danger: #ef476f;
+            --border: #dee2e6;
+            --card-shadow: 0 4px 12px rgba(0, 0, 0, 0.32);
+        }
+
+      
+        .form-div {
+            background-color: transparent;
+        }
+       
+        .bugform-container {
+            background: transparent;
+            border-radius: 10px;
+            box-shadow: var(--card-shadow);
+            overflow: hidden;
+            margin-bottom: 30px;
+            max-width: 900px; /* Limit max width */
+            margin-left: auto;
+            margin-right: auto; /* Center it */
+        }
+        
+        .form-section {
+            padding: 25px;
+            border-bottom: 1px solid var(--border);
+        }
+        
+        .section-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .section-title i {
+            background: rgba(58, 134, 255, 0.1);
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary);
+        }
+        
+        .sub-title {
+            font-size: 22px;
+            font-weight: 600;
+            color: var(--dark);
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--primary);
+        }
+        
+        .file-upload {
+            border: 2px dashed var(--border);
+            border-radius: 8px;
+            padding: 25px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            background: rgba(233, 236, 239, 0.3);
+        }
+        
+        .file-upload:hover {
+            border-color: var(--primary);
+            background: rgba(58, 134, 255, 0.05);
+        }
+        
+        .file-upload i {
+            font-size: 40px;
+            color: var(--primary);
+            margin-bottom: 15px;
+        }
+        
+        .file-upload p {
+            color: #6c757d;
+            margin-bottom: 0;
+        }
+        
+        .file-upload span {
+            color: var(--primary);
+            font-weight: 500;
+        }
+        
+        .editor-toolbar {
+            background: var(--gray);
+            border: 1px solid var(--border);
+            border-bottom: none;
+            border-radius: 6px 6px 0 0;
+            padding: 8px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 5px;
+        }
+        
+        .toolbar-btn {
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: none;
+            background: white;
+            border-radius: 4px;
+            cursor: pointer;
+            color: var(--dark);
+            transition: all 0.2s;
+        }
+        
+        .toolbar-btn:hover {
+            background: var(--primary);
+            color: white;
+        }
+        
+        .editor-content {
+            border: 1px solid var(--border);
+            border-radius: 0 0 6px 6px;
+            padding: 15px;
+            min-height: 150px;
+        }
+        
+        .editor-content:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(58, 134, 255, 0.2);
+        }
+        
+        .form-actions .btn {
+            min-width: 120px;
+        }
+        
+        @media (max-width: 768px) {
+            .form-section {
+                padding: 15px;
+            }
+            
+            .sub-title {
+                font-size: 20px;
+            }
+            
+            .form-actions .btn {
+                min-width: auto;
+                width: 100%;
+                margin-bottom: 10px;
+            }
+            
+            .form-actions {
+                flex-direction: column;
+            }
+            
+            .file-upload {
+                padding: 15px;
+            }
+        }
+
+        .form-section {
+            border: none;
+        }

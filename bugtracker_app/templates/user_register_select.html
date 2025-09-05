@@ -1,0 +1,64 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+
+{% block styles %}
+<link rel="stylesheet" href="{% static 'css/usertypeselection.css' %}">
+{% endblock %}
+
+    <form method="POST" action="{% url 'user_register_select' %}">
+        {% csrf_token %}
+        <input type="hidden" name="user_type" id="user_type" value="">
+         <div class="selection-container">
+        <h1 class="title">Select user type</h1>
+        
+        <div class="row justify-content-center">
+            <div class="col-6 mb-4">
+                <div class="user-type-card" onclick="selectUserType('developer',this)">
+                    <div class="icon-wrapper developer-icon">
+                        <i class="bi bi-code-slash"></i>
+                    </div>
+                    <h3>Developer</h3>
+                    <p>Access to code repositories, development tools, and technical documentation.</p>
+                </div>
+            </div>
+            
+            <div class="col-6 mb-4">
+                <div class="user-type-card" onclick="selectUserType('client',this)">
+                    <div class="icon-wrapper reporter-icon">
+                        <i class="bi bi-journal-text"></i>
+                    </div>
+                    <h3>Client (User)</h3>
+                    <p>Create and manage reports, access analytics, and generate insights.</p>
+                </div>
+            </div>
+        </div>
+    
+        <div class="text-center mt-4">
+            <!-- Back button -->
+            <a href="{% url 'home' %}" class="btn btn-light btn-circle me-3">
+                <i class="bi bi-arrow-left"></i>
+            </a>
+            <!-- Submit button -->
+            <button class="btn btn-primary btn-submit">Continue to Login</button>
+        </div>
+        
+        <p class="footer-note">You'll provide personal keys to your text system here!</p>
+    </div>
+
+    <script>
+        function selectUserType(type) {
+            // Set the value of the hidden input field
+        document.getElementById('user_type').value = type;
+
+            // Remove selected class from all cards
+            document.querySelectorAll('.user-type-card').forEach(el => {
+                el.classList.remove('selected');
+            });
+            
+            // Add selected class to clicked card
+            event.currentTarget.classList.add('selected');
+        }
+    </script>
+{% endblock %}

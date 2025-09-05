@@ -1,0 +1,13 @@
+{% extends 'dashboard_userinterface/base_dashboard.html' %}
+{% load static %}
+
+{% block content %}
+   <h1>User Dashboard Profile</h1>
+   <p><strong>Username:</strong> {{ username }}</p>
+   <p><strong>Email:</strong> {{ email }}</p>
+    <p><strong>Full Name:</strong> {{ name }}</p>
+   <p><strong>Password(Hash):</strong> {{ password }}</p>
+
+   {% endblock %}
+
+  
