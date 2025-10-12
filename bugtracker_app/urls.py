@@ -2,7 +2,7 @@ from django.urls import path
 from . import views
 
 urlpatterns = [
-    #home websit
+    #home website
     path('', views.home_view, name='home'),
     path('about/', views.about_view, name='about'),
     path('newpage/', views.newpage_view, name='newpage'),
@@ -23,5 +23,17 @@ urlpatterns = [
 
 
     #developer dashboard
+    path('developerdashboard_userinterface/developer_karban_dashboard/', views.kanbanDashboard_view, name='developer_kanban_dashboard'),
     path('developerdashboard_userinterface/developer_dashboard/', views.developer_dashboard_view, name='developer_dashboard'),
+    path('developerdashboard_userinterface/developer_profile/', views.developer_profile_view, name='developer_profile'),
+    path('api/fetch-bugs/',views.fetch_bugs,name='fetch_bugs'),
+
+    #admin dashboard
+    path('admindashboard_userinterface/admin_dashboard.html/', views.admin_dashboard_view, name='admin_dashboard'),
+    path('admindashboard_userinterface/admin_dashboard/delete/<int:user_id>/', views.delete_developer_view, name='delete_developer'),
+    # path('admindashboard_userinterface/admin_dashboard/reassign/<int:bug_id>/', views.reassigned_bug_view, name='reassigned_bug'),
+    
+    path('api/fetch-bugs/',views.reassigned_bug_view,name='api_reassign_bug'),
+  
+
 ] 

@@ -4,7 +4,7 @@ from django.contrib.auth.models import User
 from django.contrib import messages
 from django.db import transaction, connection
 from .models import UserProfile, Bug, Project
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, user_passes_test
 from django.core.files.storage import FileSystemStorage
 from django.http import JsonResponse, FileResponse
 from reportlab.pdfgen import canvas
@@ -15,6 +15,54 @@ import html
 import re
 import logging
 logger = logging.getLogger(__name__)
+
+def is_admin(user):
+    return user.is_staff or (hasattr(user, 'userprofile') and user.userprofile.role == 3)
+
+@login_required
+def validate_bug(request, bug_id):
+    bug = get_object_or_404(Bug, id=bug_id)
+
+    if request.method == 'POST':
+        action = request.POST.get('action', '').lower()  # convert to lowercase
+        comment = request.POST.get('comment', '').strip()
+        severity = request.POST.get('severity', '').capitalize()
+
+        # Validate action
+        if action in ['valid', 'invalid', 'duplicate']:
+            if action == 'valid':
+                bug.validity = 'Valid'
+                bug.status = 'Open'
+            elif action == 'invalid':
+                bug.validity = 'Invalid'
+                bug.status = 'Invalid'
+            elif action == 'duplicate':
+                bug.validity = 'Duplicate'
+                bug.status = 'Duplicate'
+        else:
+            messages.error(request, "Invalid action.")
+            return redirect('developer_dashboard')
+
+        # Validate comment
+        if comment:
+            bug.admin_comments = comment
+        else:
+            messages.error(request, "Comment cannot be empty.")
+            return redirect('developer_dashboard')
+
+        # Validate severity
+        if severity in ['Low', 'Medium', 'High', 'Critical']:
+            bug.severity = severity
+        else:
+            messages.error(request, "Invalid severity value.")
+            return redirect('developer_dashboard')
+
+        # Save all updates once
+        bug.save()
+        messages.success(request, "Bug validated successfully.")
+        return redirect('developer_dashboard')
+
+    return render(request, 'validate_bug.html', {'bug': bug})
 
 # Create your views here.
 def userselection_view(request):
@@ -169,9 +217,6 @@ def bugreportform_view(request):
 #     <p>File uploaded: <a href="{{ url }}" target="_blank">Download here</a></p>
 # {% endif %}
 
-
-
-
 def developerlogin_view(request):
     return render(request, "developer_login.html", {})
 
@@ -184,8 +229,16 @@ def bugdetailmenu_view(request):
 def userprofile_view(request):
     return render(request,"./dashboard_userinterface/userprofile.html",{})
 
+def kanbanDashboard_view(request):
+    return render(request,"./developerdashboard_userinterface/developer_kanban_dashboard.html",{})
+
 def developer_dashboard_view(request):
-    return render(request,"./developerdashboard_userinterface/developer_dashboard.html",{})
+    bugs = Bug.objects.filter(assigned_to=request.user).order_by('-created_at')
+    context = {"bugs": bugs}
+    return render(request,"./developerdashboard_userinterface/developer_dashboard.html",context)
+
+def admin_dashboard_view(request):
+    return render(request,"./admindashboard_userinterface/admin_dashboard.html",{})
 
 @login_required
 def profile_view(request):
@@ -224,30 +277,19 @@ def bugdetail_pdf_view(request):
     textobj.setFont("Helvetica", 15)
 
     #add bug data
-    # bugs = Bug.objects.filter(reported_by=request.user)
+    bugs = Bug.objects.filter(reported_by=request.user)
     
-    # lines = []
-
-    # for bug in bugs:
-    #     lines.append(str(bug.title))
-    #     lines.append(str(bug.description))
-    #     lines.append(str(bug.reported_by))   # e.g. username
-    #     lines.append(str(bug.assigned_to) if bug.assigned_to else "Unassigned")
-    #     lines.append(bug.created_at.strftime("%Y-%m-%d %H:%M:%S"))
-    #     lines.append(str(bug.desired_date) if bug.desired_date else "")
-    #     lines.append(str(bug.severity))
-    #     lines.append(" ")  # spacer
-    bug = Bug.objects.get(id=bug_id)
-
     lines = []
-    lines.append(f"Title: {bug.title}")
-    lines.append(f"Description: {bug.description}")
-    lines.append(f"Reporter: {bug.reported_by}")
-    lines.append(f"Assignee: {bug.assigned_to if bug.assigned_to else 'Unassigned'}")
-    lines.append(f"Created At: {bug.created_at.strftime('%Y-%m-%d %H:%M:%S')}")
-    lines.append(f"Desired Date: {bug.desired_date if bug.desired_date else ''}")
-    lines.append(f"Severity: {bug.severity}")
-    lines.append(" ")  # spacer
+
+    for bug in bugs:
+        lines.append(str(bug.title))
+        lines.append(str(bug.description))
+        lines.append(str(bug.reported_by))   # e.g. username
+        lines.append(str(bug.assigned_to) if bug.assigned_to else "Unassigned")
+        lines.append(bug.created_at.strftime("%Y-%m-%d %H:%M:%S"))
+        lines.append(str(bug.desired_date) if bug.desired_date else "")
+        lines.append(str(bug.severity))
+        lines.append(" ")  # spacer
         
     #loop
     for line in lines:
@@ -262,3 +304,159 @@ def bugdetail_pdf_view(request):
 
     safe_bugtitle = re.sub(r'[^\w\-_\. ]', '_', str(bug.title))  # replace invalid chars with _
     return FileResponse(buf, as_attachment=True, filename=f"{safe_bugtitle}.BugDetail.pdf")
+
+def developer_profile_view(request):
+    return render(request, "./developerdashboard_userinterface/developer_profile.html", {})
+
+def fetch_bugs(request):
+    bugs = Bug.objects.filter(assigned_to=request.user).values(
+        "id", "title", "description", "status", "severity", "assigned_to__username", "reported_by__username"
+    )
+    return JsonResponse(list(bugs), safe=False)
+
+def admin_dashboard_view(request):
+    developers = UserProfile.objects.filter(role=1).select_related('user')
+
+    developer_data = []
+    for dev in developers:
+        bug_count = Bug.objects.filter(assigned_to=dev.user).count()
+        assigned_bugs = Bug.objects.filter(assigned_to=dev.user)
+        assigned_bug_titles = ', '.join(bug.title for bug in assigned_bugs)
+        # actions_count = Bug.objects.filter(assigned_to=dev.user, status='Completed').count()
+
+        developer_data.append({
+            'id': dev.user.id,
+            'full_name': f"{dev.user.first_name} {dev.user.last_name}",
+            'username': dev.user.username,
+            'login_time': dev.user.last_login,
+            'bug_count': bug_count,
+            'assigned_bugs': assigned_bug_titles,
+            # 'actions_count': actions_count,
+        })
+
+    if request.method == "POST":
+        assign_to_id = request.POST.get("assign_to")
+        bug_id = request.POST.get("bug_id")
+        if not assign_to_id:
+            messages.error(request, "Please select a developer to assign.")
+            return redirect('admin_dashboard')
+        
+            
+    
+    context = {
+        'developers': developer_data
+  
+    }
+
+    return render(request, './admindashboard_userinterface/admin_dashboard.html', context)
+
+
+@transaction.atomic
+def delete_developer_view(request, user_id):
+    # try:
+    #     admin_profile = UserProfile.objects.get(user=request.user)
+    #     if admin_profile.role != 3:  # 3 = Admin
+    #         messages.error(request, "Access denied. Only Admins can remove developers.")
+    #         return redirect('admin_dashboard')
+    # except UserProfile.DoesNotExist:
+    #     messages.error(request, "Your profile is missing.")
+    #     return redirect('admin_dashboard')
+
+    user = get_object_or_404(User, id=user_id)
+    
+    Bug.objects.filter(assigned_to=user).update(
+        assigned_to=None,  # unassign developer
+    )
+
+    Bug.objects.filter(reported_by=user).update(assigned_to=None)
+    UserProfile.objects.filter(user=user).delete()
+    user.delete()
+
+
+    messages.success(request, "Developer removed. All their bugs moved to Need-to-Assign list.")
+    return redirect('admin_dashboard')
+    
+@transaction.atomic
+def reassigned_bug_view(request):
+    # Get all unassigned bugs
+    unassigned_bugs = Bug.objects.filter(assigned_to__isnull=True)
+    # Get all developers (role = 2)
+    developers = User.objects.filter(userprofile__role=2)
+
+    if request.method == "POST":
+        bug_id = request.POST.get("bug_id")
+        assign_to_id = request.POST.get("assign_to")
+
+        bug = get_object_or_404(Bug, id=bug_id, assigned_to__isnull=True)
+        developer = get_object_or_404(User, id=assign_to_id, userprofile__role=2)
+
+        bug.assigned_to = developer
+        bug.status = "Open"
+        bug.save()
+        messages.success(request, f"Bug '{bug.title}' successfully assigned to {developer.username}.")
+        return redirect('admin_dashboard')
+
+    return render(request, "reassign_bug.html", {
+        "unassigned_bugs": unassigned_bugs,
+        "developers": developers
+    })
+#     # Fetch the specific bug
+#     bugs = Bug.objects.filter(assigned_to__isnull=True)
+
+#     # POST request = admin is reassigning
+#     if request.method == "POST":
+#         assign_to_id = request.POST.get("assign_to")
+
+#         if not assign_to_id:
+#             messages.error(request, "Please select a developer to assign.")
+#             return redirect('admin_dashboard')
+
+#         try:
+#             developer = User.objects.get(id=assign_to_id, userprofile__role=2)  # Only devs
+#         except User.DoesNotExist:
+#             messages.error(request, "Selected developer not found.")
+#             return redirect('admin_dashboard')
+
+#         # Update bug info
+#         bug.assigned_to = developer
+#         bug.status = "Open"
+#         bug.save()
+
+#         messages.success(request, f"Bug '{bug.title}' successfully assigned to {developer.username}.")
+#         return redirect('admin_dashboard')
+
+#     # If GET request, just reload the dashboard
+#     developers = User.objects.filter(userprofile__role=2)
+#     unassigned_bugs = Bug.objects.filter(assigned_to__isnull=True)
+
+#     return render(request, './admindashboard_userinterface/admin_dashboard.html', {
+#         'developers': developers,
+#         'unassigned_bugs': unassigned_bugs,
+#     })
+
+
+# @user_passes_test(is_admin)
+# def validate_bug(request, bug_id):
+#     bug = get_object_or_404(Bug, id=bug_id)
+
+#     if request.method == 'POST':
+#         action = request.POST.get('action')
+#         comment = request.POST.get('comment')
+#         severity = request.POST.get('severity')
+
+#         if action in ['valid', 'invalid', 'duplicate']:
+#             bug.validity = action.capitalize()
+#             bug.status = bug.validity
+
+#         else :
+#             messages.error(request, "Invalid action selected")
+#             return redirect('bug_list')
+
+#         bug.admin_comments = comment
+#         if severity:
+#             bug.severity = severity
+#         bug.save()
+
+#         return redirect('bug_list')
+    
+#     return redirect()

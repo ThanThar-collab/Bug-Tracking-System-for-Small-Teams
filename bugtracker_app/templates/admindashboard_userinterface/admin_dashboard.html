@@ -1,0 +1,106 @@
+{% extends 'admindashboard_userinterface/base_admindashboard.html' %}
+
+{% load static %}
+
+{% block styles %}
+<link rel="stylesheet" href="{% static 'css/dashboard.css' %}">
+
+{% endblock %}
+
+{% block admin-content %}
+<div class="container-fluid p-3">
+    <!-- Header Div -->
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2 class="h4">Admin Dashboard </h2>
+        
+       
+    
+    </div>
+
+    <!-- Developer Users Table -->
+    <div class="table-responsive shadow-sm ">
+        <h5>Developers Table</h5>
+        <table class="table table-hover align-middle mb-0">
+            <thead class="table-primary" style="height: 40px;">
+                <tr>
+                    <th>ID</th>
+                    <th>Full Name</th>
+                    <th>Username</th>
+                    <!-- <th>Active Time</th> -->
+                    <th>Bug Count</th>
+                    <th>Assigned Bugs</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for dev in developers %}
+                <tr>
+                    <td>{{ dev.id }}</td>
+                    <td>{{ dev.full_name }}</td>
+                    <td>{{ dev.username }}</td>
+                    <!-- <td>{{ dev.login_time }}</td> -->
+                    <td>{{ dev.bug_count }}</td>
+                    <td>{{ dev.assigned_bugs }}</td>
+                    <td class="text-center">
+                        <div class="btn-group btn-group-sm" role="group">
+                        <a href="{% url 'delete_developer' dev.id %}" 
+                        class="btn btn-danger">
+                        Delete account
+                         </a>
+                        </div>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Client Users Table -->
+
+    <!-- Need-To-Assign Bug Table -->
+    <div class="table-responsive shadow-sm mt-4">
+    <h5>Bug Log</h5>
+    <table class="table table-hover align-middle mb-0">
+        <thead class="table-primary" style="height: 40px;">
+            <tr>
+                <th>ID</th>
+                <th>Title</th>
+                <th>Description</th>
+                <th>Status</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for bug in assigned_bugs %}
+            <tr>
+                <td>{{ bug.id }}</td>
+                <td>{{ bug.title }}</td>
+                <td>{{ bug.description }}</td>
+                <td>{{ bug.status }}</td>
+                <td class="text-center">
+                    <form method="POST">
+                        {% csrf_token %}
+                        <label for="bug">Select Bug:</label>
+                        <select name="bug_id" id="bug">
+                            {% for bug in unassigned_bugs %}
+                                <option value="{{ bug.id }}">{{ bug.title }}</option>
+                            {% endfor %}
+                        </select>
+                        <button type="submit" class="btn btn-primary btn-sm mt-1">assign</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+
+
+
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'js/dashboard.js' %}"></script>
+{% endblock %}

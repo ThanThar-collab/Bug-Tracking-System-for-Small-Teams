@@ -12,6 +12,10 @@ class Project(models.Model):
 
 class Bug(models.Model):
     STATUS_CHOICES = [
+        ('New', 'New'),
+        ('Validated', 'Validated'),
+        ('Invalid', 'Invalid'),
+        ('Duplicate', 'Duplicate'),
         ('Open', 'Open'),
         ('In Progress', 'In Progress'),
         ('Resolved', 'Resolved'),
@@ -25,14 +29,24 @@ class Bug(models.Model):
         ('Critical', 'Critical'),
     ]
 
+    VALIDITY_CHOICES = [
+        ('Pending', 'Pending'),
+        ('Valid', 'Valid'),
+        ('Invalid', 'Invalid'),
+        ('Duplicate', 'Duplicate'),
+
+    ]
+
     title = models.CharField(max_length=200)
     description = models.TextField()
     attachment = models.FileField(upload_to='bug_attachments/', null=True, blank=True) #add new field
     reported_by = models.ForeignKey(User, on_delete=models.CASCADE, null=True, related_name='reported_bugs')
     assigned_to = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True, related_name='assigned_bugs')
-    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='Open')
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='New')
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    validity = models.CharField(max_length=10, choices=VALIDITY_CHOICES, default='Pending')
+    admin_comments = models.TextField(blank=True, null=False)
     desired_date = models.DateField(null=True, blank=True) 
     severity = models.CharField(max_length=10, choices=SEVERITY_CHOICES, default='Medium')
 
