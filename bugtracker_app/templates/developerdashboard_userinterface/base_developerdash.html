@@ -22,6 +22,7 @@
     <link href="https://unpkg.com/boxicons@latest/css/boxicons.min.css" rel="stylesheet">
     <!-- Custom CSS -->
     <link rel="stylesheet" href="{% static 'css/dashboard.css' %}">
+    <link rel="stylesheet" href="{% static 'css/sidebar.css' %}">
 
      {% block styles %}{% endblock %}
 </head>
@@ -29,9 +30,9 @@
     {% include 'developerdashboard_userinterface/developer_topnavbar.html' %}
 
     <!-- Content Area -->
-    <!-- <div class="main-container"> -->
+    <div class="main-container">
 
-        <!-- {% block sidebar %}
+      {% block sidebar %}
         
           <aside class="sidebar" id="sidebar">
           
@@ -41,23 +42,18 @@
         
         <ul class="nav flex-column mb-5 mt-0">
             <li class="nav-item mb-2">
-                <a href="{% url 'dashboard' %}" class="nav-link sidebar-item">
+                <a href="{% url 'developer_dashboard' %}" class="nav-link sidebar-item">
                     <i class="bi bi-house-door-fill"></i>
-                    <span class="sidebar-text">Activity Log</span>
+                    <span class="sidebar-text">Clients' Bug</span>
                 </a>
             </li>
             <li class="nav-item mb-2">
-                <a href="{% url 'bugreportform' %}" class="nav-link sidebar-item">
-                    <i class="bi bi-bug-fill"></i>
-                    <span class="sidebar-text">Add Bug Form</span>
+                <a href="{% url 'developer_kanban_dashboard' %}" class="nav-link sidebar-item">
+                    <i class="bi bi-wrench-adjustable-circle"></i>
+                    <span class="sidebar-text">KanBan Dashboard</span>
                 </a>
             </li>
-            <li class="nav-item mb-0">
-                    <a href="{% url 'userprofile' %}" class="nav-link sidebar-item">
-                        <i class="bi bi-sliders"></i>
-                        <span class="sidebar-text">Settings</span>
-                    </a>
-            </li>
+
             <li class="nav-item mb-0">
                     <a href="{% url 'home' %}" class="nav-link sidebar-item">
                         <i class="bi bi-browser-chrome"></i>
@@ -65,17 +61,17 @@
                     </a>
             </li>
             <li class="nav-item mb-0">
-                    <a href="#" class="nav-link sidebar-item">
+                    <a href="{% url 'logout' %}" class="nav-link sidebar-item">
                         <i class="bi bi-door-open-fill"></i>
                         <span class="sidebar-text">Log out</span>
                     </a>
             </li>
         </ul>
     </aside>
-        {% endblock %} -->
+        {% endblock %}
         
      <div class="content" id="mainContent">
-        {% block content %}
+        {% block dev-content %}
             <!-- content -->
         {% endblock %}
      </div>
@@ -83,6 +79,7 @@
      {% block extra_js %}
      {% endblock %}
      <!-- <script src="{% static 'js/base-sidebar.js' %}"></script> -->
+    <script src="{% static 'js/base-sidebar.js' %}"></script>
      <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

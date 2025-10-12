@@ -1,4 +1,4 @@
-{% extends 'developerdashboard_userinterface/base_developerdash.html' %}
+{% extends 'admindashboard_userinterface/base_admindashboard.html' %}
 
 {% load static %}
 
@@ -6,11 +6,11 @@
 <link rel="stylesheet" href="{% static 'css/dashboard.css' %}">
 {% endblock %}
 
-{% block dev-content %}
+{% block admin-content %}
 <div class="container-fluid p-3">
     <!-- Header Div -->
     <div class="d-flex justify-content-between align-items-center mb-3">
-        <h2 class="h4">Developer Dashboard/ Clients' Bugs</h2>
+        <h2 class="h4">Admin Dashboard</h2>
        
         <a href="#" class="btn btn-primary addbug-btn">
             <i class="bi bi-plus-circle"></i> Button
@@ -51,8 +51,5 @@
         </table>
     </div>
 </div>
-{% endblock %}
 
-{% block extra_js %}
-<script src="{% static 'js/dashboard.js' %}"></script>
 {% endblock %}

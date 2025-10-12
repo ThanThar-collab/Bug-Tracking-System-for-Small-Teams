@@ -23,5 +23,12 @@ urlpatterns = [
 
 
     #developer dashboard
+    path('developerdashboard_userinterface/developer_karban_dashboard/', views.kanbanDashboard_view, name='developer_kanban_dashboard'),
     path('developerdashboard_userinterface/developer_dashboard/', views.developer_dashboard_view, name='developer_dashboard'),
+    path('developerdashboard_userinterface/developer_profile/', views.developer_profile_view, name='developer_profile'),
+    path('api/fetch-bugs/',views.fetch_bugs,name='fetch_bugs'),
+
+    #admin dashboard
+    path('admindashboard_userinterface/admin_dashboard.html/', views.admin_dashboard_view, name='admin_dashboard'),
+
 ] 
