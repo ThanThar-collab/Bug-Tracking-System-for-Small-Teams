@@ -30,10 +30,13 @@ urlpatterns = [
 
     #admin dashboard
     path('admindashboard_userinterface/admin_dashboard.html/', views.admin_dashboard_view, name='admin_dashboard'),
+<<<<<<< HEAD
     path('admindashboard_userinterface/admin_dashboard/delete/<int:user_id>/', views.delete_developer_view, name='delete_developer'),
     # path('admindashboard_userinterface/admin_dashboard/reassign/<int:bug_id>/', views.reassigned_bug_view, name='reassigned_bug'),
     
     path('api/fetch-bugs/',views.reassigned_bug_view,name='api_reassign_bug'),
   
+=======
+>>>>>>> 6a82746427b07d34964f739129be8fab5e30e975
 
 ] 

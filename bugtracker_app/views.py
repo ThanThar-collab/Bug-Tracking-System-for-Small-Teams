@@ -2,10 +2,16 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from django.contrib import messages
+<<<<<<< HEAD
 from django.db import transaction, connection
 from .models import UserProfile, Bug, Project
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.core.files.storage import FileSystemStorage
+=======
+from django.db import connection
+from .models import UserProfile, Bug
+from django.contrib.auth.decorators import login_required, user_passes_test
+>>>>>>> 6a82746427b07d34964f739129be8fab5e30e975
 from django.http import JsonResponse, FileResponse
 from reportlab.pdfgen import canvas
 from reportlab.lib.units import inch
@@ -16,14 +22,50 @@ import re
 import logging
 logger = logging.getLogger(__name__)
 
+<<<<<<< HEAD
 def is_admin(user):
     return user.is_staff or (hasattr(user, 'userprofile') and user.userprofile.role == 3)
 
 @login_required
+=======
+
+#------------> Admin Account Authentication in Python Shell <---------------
+# from django.contrib.auth.models import User
+# from appname.models import UserProfile  # change to your app name
+
+# # Create admin user
+# admin_user = User.objects.create_user(
+#     username='admin',
+#     password='admin123',
+#     email='admin@example.com',
+#     first_name='Main Admin'
+# )
+# admin_user.is_staff = True
+# admin_user.is_superuser = True
+# admin_user.save()
+
+# UserProfile.objects.create(user=admin_user, role=3)
+
+# exit()
+
+
+
+
+
+def is_admin(user):
+    return user.is_authenticated and (user.is_superuser or getattr(user.userprofile, 'role', None) == 3)
+
+@user_passes_test(is_admin)
+def admin_dashboard_view(request):
+    return render(request, "./admindashboard_userinterface/admin_dashboard.html", {})
+
+@user_passes_test(is_admin)
+>>>>>>> 6a82746427b07d34964f739129be8fab5e30e975
 def validate_bug(request, bug_id):
     bug = get_object_or_404(Bug, id=bug_id)
 
     if request.method == 'POST':
+<<<<<<< HEAD
         action = request.POST.get('action', '').lower()  # convert to lowercase
         comment = request.POST.get('comment', '').strip()
         severity = request.POST.get('severity', '').capitalize()
@@ -63,12 +105,48 @@ def validate_bug(request, bug_id):
         return redirect('developer_dashboard')
 
     return render(request, 'validate_bug.html', {'bug': bug})
+=======
+        action = request.POST.get('action')
+        comment = request.POST.get('comment')
+        severity = request.POST.get('severity')
+
+        if action in ['valid', 'invalid', 'duplicate']:
+            bug.validity = action.capitalize()
+            bug.status = bug.validity
+
+        else :
+            messages.error(request, "Invalid action selected")
+            return redirect('bug_list')
+
+        bug.admin_comments = comment
+        if severity:
+            bug.severity = severity
+        bug.save()
+
+        return redirect('bug_list')
+    
+    return redirect()
+
+@user_passes_test(is_admin)
+def manage_user_view(request):
+    users = User.objects.exclude(is_superuser=True)
+    return render(request, "./admindashboard_userinterface/manage_users.html", {"users": users})
+
+
+@user_passes_test(is_admin)
+def delete_user_view(request, user_id):
+    user = get_object_or_404(User, id=user_id)
+    username = user.username
+    user.delete()
+    messages.success(request, f"User '{username}' deleted successfully.")
+    return redirect("manage_users")
+>>>>>>> 6a82746427b07d34964f739129be8fab5e30e975
 
 # Create your views here.
 def userselection_view(request):
     if request.method == 'POST':
         user_type = request.POST.get('user_type')  
-        if user_type in ['developer', 'client', 'admin']:
+        if user_type in ['developer', 'client']:
             request.session['role'] = user_type
             return redirect('signup')
         else:
@@ -103,6 +181,8 @@ def login_view(request):
                         return redirect('developer_dashboard')
                     elif role == 2:  # Tester
                         return redirect('dashboard')
+                    elif role == 3:
+                        return redirect('')
                     else:
                         return redirect('home')
                 except UserProfile.DoesNotExist:
@@ -121,6 +201,7 @@ def signup_view(request):
         username = request.POST.get('username')
         email = request.POST.get('email')
         password = request.POST.get('password')
+
         role_str = request.session.get('role')
         role = role_map.get(role_str)
 
@@ -221,7 +302,7 @@ def developerlogin_view(request):
     return render(request, "developer_login.html", {})
 
 def developersignup_view(request):
-    return render(request, "developer_signup.html", {})
+    return render(request, "developer_signup.html", {}) 
 
 def bugdetailmenu_view(request):
     return render(request,"./dashboard_userinterface/bugdetailmenu.html",{})
@@ -302,8 +383,16 @@ def bugdetail_pdf_view(request):
     canva.save()
     buf.seek(0)
 
+<<<<<<< HEAD
     safe_bugtitle = re.sub(r'[^\w\-_\. ]', '_', str(bug.title))  # replace invalid chars with _
     return FileResponse(buf, as_attachment=True, filename=f"{safe_bugtitle}.BugDetail.pdf")
+=======
+    filename = "BugDetails.pdf"
+    if bugs.exists():
+        filename = f"{re.sub(r'[^\w\-_\. ]', '_', bugs.first().title)}_Details.pdf"
+    return FileResponse(buf, as_attachment=True, filename=filename)
+
+>>>>>>> 6a82746427b07d34964f739129be8fab5e30e975
 
 def developer_profile_view(request):
     return render(request, "./developerdashboard_userinterface/developer_profile.html", {})
@@ -312,6 +401,7 @@ def fetch_bugs(request):
     bugs = Bug.objects.filter(assigned_to=request.user).values(
         "id", "title", "description", "status", "severity", "assigned_to__username", "reported_by__username"
     )
+<<<<<<< HEAD
     return JsonResponse(list(bugs), safe=False)
 
 def admin_dashboard_view(request):
@@ -460,3 +550,6 @@ def reassigned_bug_view(request):
 #         return redirect('bug_list')
     
 #     return redirect()
+=======
+    return JsonResponse(list(bugs), safe=False)
+>>>>>>> 6a82746427b07d34964f739129be8fab5e30e975
