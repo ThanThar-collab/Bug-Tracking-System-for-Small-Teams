@@ -1,0 +1,105 @@
+{% extends 'admindashboard_userinterface/admin_dashboard.html' %}
+{% load static %}
+
+{% block title %}Bug Validation{% endblock %}
+{% block active_bugs %}active{% endblock %}
+
+{% block content %}
+<h1 class="page-title">Bugs Awaiting Validation</h1>
+
+<div class="table-container">
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Title</th>
+                <th>Reported By</th>
+                <th>Status</th>
+                <th>Validity</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for bug in bugs %}
+            <tr>
+                <td>#{{ bug.id }}</td>
+                <td>{{ bug.title }}</td>
+                <td>{{ bug.reported_by.username }}</td>
+                <td><span class="status {{ bug.status|lower|cut:" " }}">{{ bug.status }}</span></td>
+                <td><span class="validity {{ bug.validity|lower }}">{{ bug.validity }}</span></td>
+                <td>
+                    {% if bug.validity == 'Pending' %}
+                    <a href="#" class="btn btn-validate" data-bug-id="{{ bug.id }}" data-bug-title="{{ bug.title }}">
+                        <i class="fas fa-check"></i> Validate
+                    </a>
+                    {% else %}
+                    <span class="text-muted">Validated</span>
+                    {% endif %}
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="6" style="text-align:center;">No bugs awaiting validation found.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<div id="validationModal"
+    style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); z-index:1000;">
+    <div style="background:white; margin:10% auto; padding:20px; width:400px; border-radius:5px;">
+        <h2>Validate Bug: <span id="bugTitle"></span></h2>
+        <form method="POST" action="">
+            {% csrf_token %}
+            <input type="hidden" name="bug_id" id="modalBugId">
+            <label for="action">Action:</label>
+            <select name="action" id="action" required>
+                <option value="">Select Action</option>
+                <option value="valid">Valid</option>
+                <option value="invalid">Invalid</option>
+                <option value="duplicate">Duplicate</option>
+            </select><br><br>
+
+            <label for="severity">Severity (Optional):</label>
+            <select name="severity" id="severity">
+                <option value="">Select Severity</option>
+                <option value="Low">Low</option>
+                <option value="Medium">Medium</option>
+                <option value="High">High</option>
+                <option value="Critical">Critical</option>
+            </select><br><br>
+
+            <label for="comment">Admin Comment:</label>
+            <textarea name="comment" required></textarea><br><br>
+
+            <button type="submit" class="btn btn-primary">Submit Validation</button>
+            <button type="button"
+                onclick="document.getElementById('validationModal').style.display='none'">Cancel</button>
+        </form>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const validateButtons = document.querySelectorAll('.btn-validate');
+        validateButtons.forEach(button => {
+            button.addEventListener('click', function (event) {
+                event.preventDefault();
+                const bugId = this.dataset.bugId;
+                const bugTitle = this.dataset.bugTitle;
+                showValidationModal(bugId, bugTitle);
+            });
+        });
+    });
+
+    function showValidationModal(bugId, bugTitle) {
+        const modal = document.getElementById('validationModal');
+        modal.querySelector('#bugTitle').textContent = bugTitle;
+        modal.querySelector('form').action = "{% url 'validate_bug' 0 %}".replace('0', bugId);
+        modal.style.display = 'block';
+    }
+</script>
+
+
+{% endblock %}

@@ -1,0 +1,55 @@
+.add-user-btn {
+  background: #4361ee;
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-bottom: 20px;
+}
+
+.table-container {
+  background: #fff;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th, td {
+  padding: 15px;
+  border-bottom: 1px solid #eee;
+  text-align: left;
+}
+
+tr:hover {
+  background: #f8f9fa;
+}
+
+.status.active {
+  color: #2e7d32;
+  background: #e8f5e9;
+  padding: 4px 10px;
+  border-radius: 12px;
+}
+
+.btn {
+  border: none;
+  padding: 6px 10px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.btn-edit {
+  background: #e3f2fd;
+  color: #4361ee;
+}
+
+.btn-delete {
+  background: #ffebee;
+  color: #c62828;
+}

@@ -94,7 +94,7 @@ WSGI_APPLICATION = 'bugtracker.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'bug_db_v2',
+        'NAME': 'bug_db_v5',
         'USER': 'root',
         'PASSWORD': 'Than1923@',
         'HOST': 'localhost',

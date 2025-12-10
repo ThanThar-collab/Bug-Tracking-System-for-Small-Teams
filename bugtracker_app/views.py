@@ -2,40 +2,33 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from django.contrib import messages
-from django.db import transaction, connection
-from .models import UserProfile, Bug, Project
-from django.contrib.auth.decorators import login_required
-from django.core.files.storage import FileSystemStorage
+from django.db import connection
+from .models import UserProfile, Bug
+from django.contrib.auth.decorators import login_required, user_passes_test
 from django.http import JsonResponse, FileResponse
 from reportlab.pdfgen import canvas
 from reportlab.lib.units import inch
 from reportlab.lib.pagesizes import letter
+from django.utils import timezone
+from datetime import timedelta
+from django.db.models import Count, Q
 import io
 import html
 import re
 import logging
 logger = logging.getLogger(__name__)
 
-# Create your views here.
+
 def userselection_view(request):
     if request.method == 'POST':
         user_type = request.POST.get('user_type')  
-        if user_type in ['developer', 'client', 'admin']:
+        if user_type in ['developer', 'client']:
             request.session['role'] = user_type
             return redirect('signup')
         else:
             messages.error(request, "Please select a valid user type.")
             return redirect('user_register_select')
     return render(request, 'user_register_select.html')
-
-def home_view(request):
-    return render(request,"home.html",{})
-
-def about_view(request):
-    return render(request,"about.html",{})
-
-def newpage_view(request):
-    return render(request,"newpage.html",{})
 
 def login_view(request):
     if request.method == "POST":
@@ -49,12 +42,14 @@ def login_view(request):
              # Get user profile
                 try:
                     profile = UserProfile.objects.get(user=user)
-                    role = profile.role  # This will be an integer (1, 2, or 3)
+                    role = profile.role
                      # Redirect based on role
                     if role == 1:  # Developer
                         return redirect('developer_dashboard')
                     elif role == 2:  # Tester
                         return redirect('dashboard')
+                    elif role == 3:
+                        return redirect('admin_dashboard')
                     else:
                         return redirect('home')
                 except UserProfile.DoesNotExist:
@@ -73,6 +68,7 @@ def signup_view(request):
         username = request.POST.get('username')
         email = request.POST.get('email')
         password = request.POST.get('password')
+
         role_str = request.session.get('role')
         role = role_map.get(role_str)
 
@@ -93,6 +89,133 @@ def signup_view(request):
 
     return render(request, 'signup.html')
 
+def is_admin(user):
+    return user.is_authenticated and (user.is_superuser or getattr(user.userprofile, 'role', None) == 3)
+
+@user_passes_test(is_admin)
+def admin_dashboard_view(request):
+    last_week = timezone.now() - timedelta(days=7)
+
+    total_clients = User.objects.filter(userprofile__role=2).count()
+    total_developers = User.objects.filter(userprofile__role=1).count()
+    total_users = User.objects.count()
+
+    total_bugs = Bug.objects.count()
+    pending_bugs = Bug.objects.filter(validity='Pending').count()
+    open_bugs = Bug.objects.filter(status__in=['Open', 'New', 'In Progress']).count()
+    resolved_this_week = Bug.objects.filter(
+        status__in=['Resolved', 'Closed'],
+        updated_at__gte=last_week
+    ).count()
+
+    recent_bugs = Bug.objects.all().order_by('-created_at')[:10]
+
+    context = {
+        'total_bugs': total_bugs,
+        'total_clients': total_clients,
+        'total_developers': total_developers,
+        'total_users': total_users,
+        'pending_bugs': pending_bugs,
+        'open_bugs': open_bugs,
+        'resolved_this_week': resolved_this_week,
+        'recent_bugs': recent_bugs,
+    }
+    # FIXED: Added app prefix
+    return render(request, "admindashboard_userinterface/admin_dashboard.html", context)
+
+@user_passes_test(is_admin)
+def bug_list_view(request):
+    bugs = Bug.objects.all().order_by('-created_at')
+    # FIXED: Added app prefix
+    return render(request, 'admindashboard_userinterface/bug_list.html', {"bugs": bugs})
+
+@user_passes_test(is_admin)
+def validate_bug(request, bug_id):
+    bug = get_object_or_404(Bug, id=bug_id)
+
+    if request.method == 'POST':
+        action = request.POST.get('action')
+        comment = request.POST.get('comment')
+        severity = request.POST.get('severity')
+
+        if action in ['valid', 'invalid', 'duplicate']:
+            bug.validity = action.capitalize()
+            bug.status = bug.validity
+
+        else :
+            messages.error(request, "Invalid action selected")
+            return redirect('bug_list')
+
+        bug.admin_comments = comment
+        if severity:
+            bug.severity = severity
+        bug.save()
+
+        return redirect('bug_list')
+    
+    return redirect('bug_list')
+
+@user_passes_test(is_admin)
+def manage_user_view(request):
+    users = User.objects.exclude(is_superuser=True)
+    # FIXED: Added app prefix
+    return render(request, 'admindashboard_userinterface/userManagement.html', {'users': users})
+
+
+@user_passes_test(is_admin)
+def delete_user_view(request, user_id):
+    user = get_object_or_404(User, id=user_id)
+    username = user.username
+    user.delete()
+    messages.success(request, f"User '{username}' deleted successfully.")
+    return redirect('manage_users')
+
+@user_passes_test(is_admin)
+@login_required
+def manage_bugs_view(request):
+    # Fetch all bugs and order them
+    all_bugs = Bug.objects.all().order_by('-created_at')
+    
+    # Calculate stats for the cards
+    total_bugs = all_bugs.count()
+    open_bugs = all_bugs.filter(status='Open').count()
+    in_progress_bugs = all_bugs.filter(status='In Progress').count()
+    
+    # Calculate bugs closed this week (example logic)
+    one_week_ago = timezone.now() - timedelta(days=7)
+    closed_this_week = all_bugs.filter(status='Closed', created_at__gte=one_week_ago).count()
+
+    context = {
+        'bugs': all_bugs,
+        'total_bugs': total_bugs,
+        'open_bugs': open_bugs,
+        'in_progress_bugs': in_progress_bugs,
+        'closed_this_week': closed_this_week,
+    }
+    # FIXED: Added app prefix
+    return render(request, 'admindashboard_userinterface/bugManagement.html', context)
+
+@user_passes_test(is_admin)
+def delete_bug_view(request, bug_id):
+    bug = get_object_or_404(Bug, id=bug_id)
+    title =  bug.title
+    bug.delete()
+    messages.success(request, f"Bug '{title}' deleted successfully.")
+    return redirect('manage_bugs')
+
+# Create your views here.
+
+
+def home_view(request):
+    return render(request,"home.html",{})
+
+def about_view(request):
+    return render(request,"about.html",{})
+
+def newpage_view(request):
+    return render(request,"newpage.html",{})
+
+
 def logout_view(request):
     logout(request)
     storage = messages.get_messages(request)
@@ -101,9 +224,6 @@ def logout_view(request):
     return redirect("home")
 
 def dashboard_view(request):
-    # bugs = Bug.objects.all()
-
-    # Only show the logged-in user's bugs
     bugs = Bug.objects.filter(reported_by=request.user).order_by('-created_at')
 
     context = {
@@ -139,7 +259,7 @@ def bugreportform_view(request):
                 attachment=attachment,
                 desired_date=desired_date,
                 assigned_to_id=assigned_to.id if assigned_to else None,
-                reported_by_id=request.user.id,  # use logged-in user
+                reported_by_id=request.user.id,
                 severity=severity,
                 status=status,
             )
@@ -158,25 +278,18 @@ def bugreportform_view(request):
             if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
                 return JsonResponse({"success": False, "error": str(e)})
 
-    developers = User.objects.filter(userprofile__role=1)  # Only developer users
+    developers = User.objects.filter(userprofile__role=1)
     context = {
         'developers': developers,
     }
     return render(request, "./dashboard_userinterface/bugreportform.html", context)
 
 
-# {% if url %}
-#     <p>File uploaded: <a href="{{ url }}" target="_blank">Download here</a></p>
-# {% endif %}
-
-
-
-
 def developerlogin_view(request):
     return render(request, "developer_login.html", {})
 
 def developersignup_view(request):
-    return render(request, "developer_signup.html", {})
+    return render(request, "developer_signup.html", {}) 
 
 def bugdetailmenu_view(request):
     return render(request,"./dashboard_userinterface/bugdetailmenu.html",{})
@@ -184,8 +297,13 @@ def bugdetailmenu_view(request):
 def userprofile_view(request):
     return render(request,"./dashboard_userinterface/userprofile.html",{})
 
+def kanbanDashboard_view(request):
+    return render(request,"./developerdashboard_userinterface/developer_kanban_dashboard.html",{})
+
 def developer_dashboard_view(request):
-    return render(request,"./developerdashboard_userinterface/developer_dashboard.html",{})
+    bugs = Bug.objects.filter(assigned_to=request.user).order_by('-created_at')
+    context = {"bugs": bugs}
+    return render(request,"./developerdashboard_userinterface/developer_dashboard.html",context)
 
 @login_required
 def profile_view(request):
@@ -204,7 +322,7 @@ def profile_view(request):
         context = {
         "username": row[0],
         "email": row[1],
-        "name": row[2],   # first_name
+        "name": row[2],
         "password": row[3],
        
         }
@@ -212,53 +330,45 @@ def profile_view(request):
 
 
 def bugdetail_pdf_view(request):
-    #create Bytestream buffer
     buf = io.BytesIO()
-
-    #create a canvas
     canva = canvas.Canvas(buf, pagesize=letter, bottomup=0)
-
-    #create a text obj
     textobj = canva.beginText()
-    textobj.setTextOrigin(inch, inch)   #text size
+    textobj.setTextOrigin(inch, inch)
     textobj.setFont("Helvetica", 15)
-
-    #add bug data
-    # bugs = Bug.objects.filter(reported_by=request.user)
+    bugs = Bug.objects.filter(reported_by=request.user)
     
-    # lines = []
-
-    # for bug in bugs:
-    #     lines.append(str(bug.title))
-    #     lines.append(str(bug.description))
-    #     lines.append(str(bug.reported_by))   # e.g. username
-    #     lines.append(str(bug.assigned_to) if bug.assigned_to else "Unassigned")
-    #     lines.append(bug.created_at.strftime("%Y-%m-%d %H:%M:%S"))
-    #     lines.append(str(bug.desired_date) if bug.desired_date else "")
-    #     lines.append(str(bug.severity))
-    #     lines.append(" ")  # spacer
-    bug = Bug.objects.get(id=bug_id)
-
     lines = []
-    lines.append(f"Title: {bug.title}")
-    lines.append(f"Description: {bug.description}")
-    lines.append(f"Reporter: {bug.reported_by}")
-    lines.append(f"Assignee: {bug.assigned_to if bug.assigned_to else 'Unassigned'}")
-    lines.append(f"Created At: {bug.created_at.strftime('%Y-%m-%d %H:%M:%S')}")
-    lines.append(f"Desired Date: {bug.desired_date if bug.desired_date else ''}")
-    lines.append(f"Severity: {bug.severity}")
-    lines.append(" ")  # spacer
+
+    for bug in bugs:
+        lines.append(str(bug.title))
+        lines.append(str(bug.description))
+        lines.append(str(bug.reported_by))
+        lines.append(str(bug.assigned_to) if bug.assigned_to else "Unassigned")
+        lines.append(bug.created_at.strftime("%Y-%m-%d %H:%M:%S"))
+        lines.append(str(bug.desired_date) if bug.desired_date else "")
+        lines.append(str(bug.severity))
+        lines.append(" ")
         
-    #loop
     for line in lines:
-        clean_line = html.unescape(str(line))   # decode any &nbsp;, etc.
+        clean_line = html.unescape(str(line))
         textobj.textLine(clean_line)
 
-    #finish up
     canva.drawText(textobj)
     canva.showPage()
     canva.save()
     buf.seek(0)
 
-    safe_bugtitle = re.sub(r'[^\w\-_\. ]', '_', str(bug.title))  # replace invalid chars with _
-    return FileResponse(buf, as_attachment=True, filename=f"{safe_bugtitle}.BugDetail.pdf")
+    filename = "BugDetails.pdf"
+    if bugs.exists():
+        filename = f"{re.sub(r'[^\w\-_\. ]', '_', bugs.first().title)}_Details.pdf"
+    return FileResponse(buf, as_attachment=True, filename=filename)
+
+
+def developer_profile_view(request):
+    return render(request, "./developerdashboard_userinterface/developer_profile.html", {})
+
+def fetch_bugs(request):
+    bugs = Bug.objects.filter(assigned_to=request.user).values(
+        "id", "title", "description", "status", "severity", "assigned_to__username", "reported_by__username"
+    )
+    return JsonResponse(list(bugs), safe=False)

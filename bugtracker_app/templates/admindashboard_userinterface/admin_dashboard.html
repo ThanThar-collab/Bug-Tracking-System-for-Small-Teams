@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bug Tracker - {% block title %}Admin Dashboard{% endblock %}</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/css_admin.css' %}">
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+    <div class="dashboard-container">
+        <div class="sidebar">
+            <div class="sidebar-header">
+                <h2>Bug Tracker</h2>
+            </div>
+            <div class="sidebar-menu">
+                <a href="{% url 'admin_dashboard' %}" class="menu-item {% block active_dashboard %}{% endblock %}">
+                    <i class="fas fa-tachometer-alt"></i>
+                    <span>Dashboard</span>
+                </a>
+                
+                <a href="{% url 'manage_bugs' %}" class="menu-item {% block active_bugs %}{% endblock %}">
+                    <i class="fas fa-bug"></i>
+                    <span>Bugs</span>
+                </a>
+                
+                <a href="{% url 'manage_users' %}" class="menu-item {% block active_users %}{% endblock %}">
+                    <i class="fas fa-users"></i>
+                    <span>User Account</span>
+                </a>
+                <a href="{% url 'logout' %}" class="menu-item">
+                    <i class="fas fa-user"></i>
+                    <span>Log Out</span>
+                </a>
+            </div>
+        </div>
+
+        <div class="main-content">
+            <div class="header">
+                <div class="search-box">
+                    <i class="fas fa-search"></i>
+                    <input type="text" placeholder="Search...">
+                </div>
+                <div class="header-right">
+                    <div class="notification">
+                        <i class="fas fa-bell"></i>
+                        <span class="notification-badge">3</span>
+                    </div>
+                    <div class="user-profile">
+                        <img src="https://ui-avatars.com/api/?name=Admin+User&background=4361ee&color=fff" alt="Admin User">
+                        <span>Admin User</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="content">
+                {% block content %}
+                <h1 class="page-title">Dashboard</h1>
+                
+                <div class="stats-container">
+                    <div class="stat-card bugs">
+                        <div class="stat-icon">
+                            <i class="fas fa-bug"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h3>{{ total_bugs }}</h3>
+                            <p>Total Bugs</p>
+                        </div>
+                    </div>
+                    <div class="stat-card clients">
+                        <div class="stat-icon">
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h3>{{ total_clients }}</h3>
+                            <p>Clients</p>
+                        </div>
+                    </div>
+                    <div class="stat-card developers">
+                        <div class="stat-icon">
+                            <i class="fas fa-code"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h3>{{ total_developers }}</h3>
+                            <p>Developers</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h2>Recent Bugs</h2>
+                    <div class="table-responsive">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Title</th>
+                                    <th>Client</th>
+                                    <th>Assignee</th>
+                                    <th>Status</th>
+                                    <th>Severity</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for bug in recent_bugs %}
+                                <tr>
+                                    <td>#{{ bug.id }}</td>
+                                    <td>{{ bug.title }}</td>
+                                    <td>{{ bug.reported_by.username }}</td>
+                                    <td>{{ bug.assigned_to.username|default:"Unassigned" }}</td>
+                                    <td><span class="status status-{{ bug.status|lower|cut:" " }}">{{ bug.status }}</span></td>
+                                    <td><span class="severity {{ bug.severity|lower }}">{{ bug.severity }}</span></td>
+                                </tr>
+                                {% empty %}
+                                <tr><td colspan="6">No recent bugs found.</td></tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h2>Client Overview</h2>
+                    <div class="table-responsive">
+                        <table>
+                            <thead>
+                                
+                            </thead>
+                            <tbody>
+                                
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                {% endblock content %}
+            </div>
+        </div>
+    </div>
+
+    <script src="{% static 'js/script_admin.js' %}"></script>
+    {% block extra_js %}{% endblock %}
+
+</body>
+</html>

@@ -3,224 +3,56 @@
 {% load static %}
 
 {% block styles %}
-<link rel="stylesheet" href="{% static 'css/dev-kanbanboard.css' %}">
-
+<link rel="stylesheet" href="{% static 'css/dashboard.css' %}">
 {% endblock %}
 
-{% block content %}
-
-       <div class="container-fluid">
-        <div class="row">
-
-            <!-- Main Content -->
-            <div class="col-12 main-content">
-                <div class="header">
-                    <div class="breadcrumb fs-3">
-                        <a href="#">Developer Dashboard </a> /  <a href="#"> Karban Board </a>
-                    </div>
-                    <div class="search-box">
-                        <i class="fas fa-search"></i>
-                        <input type="text" placeholder="Search issues...">
-                    </div>
-                </div>
-
-                <div class="kanban-filters">
-                    <button class="filter-btn active">Key Issues</button>
-                    <button class="filter-btn">Recently Updated</button>
-                </div>
-
-                <div class="kanban-board">
-                    <div class="row g-3">
-                        <!-- Open Column -->
-                        <div class="col-3">
-                            <div class="column open-column ">
-                                <div class="column-header">
-                                    <div class="column-title">
-                                        <i class="fas fa-exclamation-circle"></i> Open
-                                        <span class="card-count" id="open-count">3</span>
-                                    </div>
-                                    <i class="fas fa-ellipsis-vertical"></i>
-                                </div>
-                                <div class="cards-container" id="open-container">
-                                    <div class="card" draggable="true" data-id="1">
-                                        <div class="card-header">
-                                            <span class="bug-id">BUG-101</span>
-                                            <span class="priority high"><i class="fas fa-arrow-up"></i> High</span>
-                                        </div>
-                                        <div class="card-content">
-                                            <div class="bug-title">Login page not responding</div>
-                                            <div class="bug-description">Users are unable to login due to timeout errors on the authentication service.</div>
-                                        </div>
-                                        <div class="card-footer">
-                                            <div class="assignee">
-                                                <div class="avatar">JD</div>
-                                                <span>Mike Davis</span>
-                                            </div>
-                            
-                                        </div>
-                                    </div>
-                                    
-                            
-
-                                    <div class="card" draggable="true" data-id="7">
-                                        <div class="card-header">
-                                            <span class="bug-id">BUG-102</span>
-                                            <span class="priority low"><i class="fas fa-arrow-down"></i> Low</span>
-                                        </div>
-                                        <div class="card-content">
-                                            <div class="bug-title">Inconsistent font size in headers</div>
-                                            <div class="bug-description">Header fonts are not consistent across different browsers.</div>
-                                        </div>
-                                        <div class="card-footer">
-                                            <div class="assignee">
-                                                <div class="avatar">AS</div>
-                                                <span>Mike Davis</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- In Progress Column -->
-                        <div class="col-3">
-                            <div class="column progress-column">
-                                <div class="column-header">
-                                    <div class="column-title">
-                                        <i class="fas fa-spinner"></i> In Progress
-                                        <span class="card-count" id="progress-count">2</span>
-                                    </div>
-                                    <i class="fas fa-ellipsis-vertical"></i>
-                                </div>
-                                <div class="cards-container" id="progress-container">
-                                    <div class="card" draggable="true" data-id="4">
-                                        <div class="card-header">
-                                            <span class="bug-id">BUG-99</span>
-                                            <span class="priority high"><i class="fas fa-arrow-up"></i> High</span>
-                                        </div>
-                                        <div class="card-content">
-                                            <div class="bug-title">Database connection pool exhausted</div>
-                                            <div class="bug-description">Under heavy load, the database connections are not being released properly.</div>
-                                        </div>
-                                        <div class="card-footer">
-                                            <div class="assignee">
-                                                <div class="avatar">MD</div>
-                                                <span>Mike Davis</span>
-                                            </div>
-                                        
-                                        </div>
-                                    </div>
-                                    
-                                    <div class="card" draggable="true" data-id="5">
-                                        <div class="card-header">
-                                            <span class="bug-id">BUG-107</span>
-                                            <span class="priority medium"><i class="fas fa-arrow-right"></i> Medium</span>
-                                        </div>
-                                        <div class="card-content">
-                                            <div class="bug-title">Shopping cart calculation error</div>
-                                            <div class="bug-description">Tax calculation is incorrect when multiple items are in the cart with promotions.</div>
-                                        </div>
-                                        <div class="card-footer">
-                                            <div class="assignee">
-                                                <div class="avatar">EW</div>
-                                                <span>Mike Davis</span>
-                                            </div>
-                                          
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                       <!-- In Testing Column -->
-                        <div class="col-3">
-                            <div class="column testing-column">
-                                <div class="column-header">
-                                    <div class="column-title">
-                                        <i class="bi bi-building-fill-check"></i> In Testing
-                                        <span class="card-count" id="testing-count">2</span>
-                                    </div>
-                                    <i class="fas fa-ellipsis-vertical"></i>
-                                </div>
-                                <div class="cards-container" id="testing-container">
-                                    <div class="card" draggable="true" data-id="4">
-                                        <div class="card-header">
-                                            <span class="bug-id">BUG-99</span>
-                                            <span class="priority high"><i class="fas fa-arrow-up"></i> High</span>
-                                        </div>
-                                        <div class="card-content">
-                                            <div class="bug-title">Database connection pool exhausted</div>
-                                            <div class="bug-description">Under heavy load, the database connections are not being released properly.</div>
-                                        </div>
-                                        <div class="card-footer">
-                                            <div class="assignee">
-                                                <div class="avatar">MD</div>
-                                                <span>Mike Davis</span>
-                                            </div>
-                                        
-                                        </div>
-                                    </div>
-                                    
-                                    <div class="card" draggable="true" data-id="5">
-                                        <div class="card-header">
-                                            <span class="bug-id">BUG-107</span>
-                                            <span class="priority medium"><i class="fas fa-arrow-right"></i> Medium</span>
-                                        </div>
-                                        <div class="card-content">
-                                            <div class="bug-title">Shopping cart calculation error</div>
-                                            <div class="bug-description">Tax calculation is incorrect when multiple items are in the cart with promotions.</div>
-                                        </div>
-                                        <div class="card-footer">
-                                            <div class="assignee">
-                                                <div class="avatar">EW</div>
-                                                <span>Mike Davis</span>
-                                            </div>
-                                          
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- Fixed/Closed Column -->
-                        <div class="col-3">
-                            <div class="column fixed-column">
-                                <div class="column-header">
-                                    <div class="column-title">
-                                        <i class="fas fa-check-circle"></i> Fixed
-                                        <span class="card-count" id="fixed-count">2</span>
-                                    </div>
-                                    <i class="fas fa-ellipsis-vertical"></i>
-                                </div>
-                                <div class="cards-container" id="fixed-container">
-                                    <div class="card" draggable="true" data-id="6">
-                                        <div class="card-header">
-                                            <span class="bug-id">BUG-95</span>
-                                            <span class="priority medium"><i class="fas fa-arrow-right"></i> Medium</span>
-                                        </div>
-                                        <div class="card-content">
-                                            <div class="bug-title">Password reset email not sent</div>
-                                            <div class="bug-description">Users are not receiving password reset emails due to SMTP configuration issue.</div>
-                                        </div>
-                                        <div class="card-footer">
-                                            <div class="assignee">
-                                                <div class="avatar">JD</div>
-                                                <span>Mike Davis</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    
-                                    
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+{% block dev-content %}
+<div class="container-fluid p-3">
+    <!-- Header Div -->
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2 class="h4">Developer Dashboard/ Clients' Bugs</h2>
+       
+        <a href="#" class="btn btn-primary addbug-btn">
+            <i class="bi bi-plus-circle"></i> Button
+        </a>
     </div>
+
+    <!-- Responsive Table -->
+    <div class="table-responsive shadow-sm" >
+        <table class="table table-hover align-middle mb-0">
+            <thead class="table-primary" style="height: 40px;">
+                <tr>
+                    <th>ID</th>
+                    <th>Title</th>
+                    <th>Status</th>
+                    <th>Assignee</th>
+                    <th>Reporter</th>
+                    <th>Desired_Date</th>
+                    <th class="text-center">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for bug in bugs %}
+                <tr>
+                    <td>{{ bug.id }}</td>
+                    <td>{{ bug.title}}</td>
+                    <td>{{ bug.status }}</td>
+                    <td>{{ bug.assigned_to }}</td>
+                    <td>{{ bug.reported_by }}</td>
+                    <td>{{ bug.desired_date }}</td>
+                    <td class="text-center">
+                        <div class="btn-group btn-group-sm" role="group">
+                            <a href="{% url 'bugdetail_pdf' %}" class="btn btn-primary">View Detail</a>
+                        </div>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
 {% endblock %}
 
 {% block extra_js %}
-
-<script src="{% static 'js/dev-kanbanboard.js' %}"></script>
+<script src="{% static 'js/dashboard.js' %}"></script>
 {% endblock %}

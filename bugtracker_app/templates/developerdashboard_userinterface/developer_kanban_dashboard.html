@@ -1,0 +1,101 @@
+{% extends 'developerdashboard_userinterface/base_developerdash.html' %}
+
+{% load static %}
+
+{% block styles %}
+<link rel="stylesheet" href="{% static 'css/dev-kanbanboard.css' %}">
+{% endblock %}
+
+{% block dev-content %}
+
+    <div class="container-fluid">
+        <div class="row">
+
+            <!-- Main Content -->
+            <div class="col-12 main-content">
+                <div class="header">
+                    <div class="breadcrumb fs-3">
+                         <a href="#"> Kanban Board </a>
+                    </div>
+                    <div class="search-box">
+                        <i class="fas fa-search"></i>
+                        <input type="text" placeholder="Search issues...">
+                    </div>
+                </div>
+
+                <div class="kanban-filters">
+                    <button class="filter-btn active">Key Issues</button>
+                    <button class="filter-btn">Recently Updated</button>
+                </div>
+
+                <div class="kanban-board">
+                    <div class="row g-3">
+                        <!-- Open Column -->
+                        <div class="col-3">
+                            <div class="column open-column ">
+                                <div class="column-header">
+                                    <div class="column-title">
+                                        <i class="fas fa-exclamation-circle"></i> Open
+                                        <span class="card-count" id="open-count">3</span>
+                                    </div>
+                                    <i class="fas fa-ellipsis-vertical"></i>
+                                </div>
+                                <div class="cards-container" id="open-container"> </div>
+                            </div>
+                        </div>
+
+                        <!-- In Progress Column -->
+                        <div class="col-3">
+                            <div class="column progress-column">
+                                <div class="column-header">
+                                    <div class="column-title">
+                                        <i class="fas fa-spinner"></i> In Progress
+                                        <span class="card-count" id="progress-count">2</span>
+                                    </div>
+                                    <i class="fas fa-ellipsis-vertical"></i>
+                                </div>
+                                <div class="cards-container" id="progress-container">   </div>
+                            </div>
+                        </div>
+
+                       <!-- In Testing Column -->
+                        <div class="col-3">
+                            <div class="column testing-column">
+                                <div class="column-header">
+                                    <div class="column-title">
+                                        <i class="bi bi-building-fill-check"></i> In Testing
+                                        <span class="card-count" id="testing-count">2</span>
+                                    </div>
+                                    <i class="fas fa-ellipsis-vertical"></i>
+                                </div>
+                                <div class="cards-container" id="testing-container"></div>
+                                
+                            </div>
+                        </div>
+                        <!-- Fixed/Closed Column -->
+                        <div class="col-3">
+                            <div class="column fixed-column">
+                                <div class="column-header">
+                                    <div class="column-title">
+                                        <i class="fas fa-check-circle"></i> Fixed
+                                        <span class="card-count" id="fixed-count">2</span>
+                                    </div>
+                                    <i class="fas fa-ellipsis-vertical"></i>
+                                </div>
+                                <div class="cards-container" id="fixed-container">
+                             
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block extra_js %}
+
+<script src="{% static 'js/drap&dropcard.js' %}"></script>
+
+{% endblock %}

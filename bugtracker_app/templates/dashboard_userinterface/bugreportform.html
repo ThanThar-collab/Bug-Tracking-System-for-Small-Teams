@@ -1,190 +1,183 @@
 {% extends 'dashboard_userinterface/base_dashboard.html' %}
 {% load static %}
 
- {% block styles %}
-    <link rel="stylesheet" href="{% static 'css/bugreportform.css' %}">
-    <link rel="stylesheet" href="{% static 'css/texteditor.css' %}">
-    {% endblock %}
+{% block styles %}
+<link rel="stylesheet" href="{% static 'css/bugreportform.css' %}">
+<link rel="stylesheet" href="{% static 'css/texteditor.css' %}">
+{% endblock %}
 
 {% block content %}
-    <div class="bugform-container mt-4">
-        <div class="row justify-content-center form-div mt-4">
-            <div class="col-lg-10 ">
-                <div class="form-container">
-                    <form method="POST" action="{% url 'bugreportform' %}" enctype="multipart/form-data" id="bug_report">
-                        {% csrf_token %}
-                        
-                            <div class="form-section">
-                                <div>
-                                    <h2 class="sub-title">Bug Report Form</h2>
-                                </div>
+<div class="bugform-container mt-4">
+    <div class="row justify-content-center form-div mt-4">
+        <div class="col-lg-10">
+            <div class="form-container">
+                <form method="POST" action="{% url 'bugreportform' %}" enctype="multipart/form-data" id="bug_report">
+                    {% csrf_token %}
 
-                                
-                                <div class="row mt-3">
-
-                                    <div class="mb-3 col-md-6">
-                                        <label for="bug_title" class="form-label">Bug Title</label>
-                                        <input type="text" id="bug_title" class="form-control" placeholder="Enter bug title " required name="bug_title">
-                                    </div>
-                    
-                                </div>
-                                
-                                <!-- text editor textarea -->
-                                <div class="mb-3 mt-3">
-                                    <label for="bug_description" class="form-label">Description (Describe your bug in actual behavior and expected behavior)</label>
-                                    <div class="container mt-2">
-                                        <div class="toolbar">
-                                            <div class="head">
-                                                <input type="text" placeholder="Filename" id="filename">
-                                                    <select onchange="fileHandle(this.value); this.selectedIndex=0">
-                                                        <option value="" selected="" hidden="" disabled="">File save</option>
-                                                        <option value="new">New file</option>
-                                                        <option value="txt">Save as txt</option>
-                                                        <option value="pdf">Save as pdf</option>
-                                                    </select>
-                                                    <select onchange="formatDoc('formatBlock', this.value); this.selectedIndex=0;">
-                                                        <option value="" selected="" hidden="" disabled="">Format</option>
-                                                        <option value="h1">Heading 1</option>
-                                                        <option value="h2">Heading 2</option>
-                                                        <option value="h3">Heading 3</option>
-                                                        <option value="h4">Heading 4</option>
-                                                        <option value="h5">Heading 5</option>
-                                                        <option value="h6">Heading 6</option>
-                                                        <option value="p">Paragraph</option>
-                                                    </select>
-                                                    <select onchange="formatDoc('fontSize', this.value); this.selectedIndex=0;">
-                                                        <option value="" selected="" hidden="" disabled="">Font size</option>
-                                                        <option value="1">Extra small</option>
-                                                        <option value="2">Small</option>
-                                                        <option value="3">Regular</option>
-                                                        <option value="4">Medium</option>
-                                                        <option value="5">Large</option>
-                                                        <option value="6">Extra Large</option>
-                                                        <option value="7">Big</option>
-                                                    </select>
-                                                    <div class="color">
-                                            
-                                                    <span>Color</span>
-                                                    <input type="color" oninput="formatDoc('foreColor', this.value); this.value='#000000';">
-                                                    </div>
-                                                    <div class="color">
-                                                    <span>Background</span>
-                                                    <input type="color" oninput="formatDoc('hiliteColor', this.value); this.value='#000000';">
-                                                    </div>
-                                                </div>
-                                                <div class="btn-toolbar">
-                                                    <button onclick="formatDoc('undo')"><i class='bx bx-undo' ></i></button>
-                                                    <button onclick="formatDoc('redo')"><i class='bx bx-redo' ></i></button>
-                                                    <button onclick="formatDoc('bold')"><i class='bx bx-bold'></i></button>
-                                                    <button onclick="formatDoc('underline')"><i class='bx bx-underline' ></i></button>
-                                                    <button onclick="formatDoc('italic')"><i class='bx bx-italic' ></i></button>
-                                                    <button onclick="formatDoc('strikeThrough')"><i class='bx bx-strikethrough' ></i></button>
-                                                    <button onclick="formatDoc('justifyLeft')"><i class='bx bx-align-left' ></i></button>
-                                                    <button onclick="formatDoc('justifyCenter')"><i class='bx bx-align-middle' ></i></button>
-                                                    <button onclick="formatDoc('justifyRight')"><i class='bx bx-align-right' ></i></button>
-                                                    <button onclick="formatDoc('justifyFull')"><i class='bx bx-align-justify' ></i></button>
-                                                    <button onclick="formatDoc('insertOrderedList')"><i class='bx bx-list-ol' ></i></button>
-                                                    <button onclick="formatDoc('insertUnorderedList')"><i class='bx bx-list-ul' ></i></button>
-                                                    <button onclick="addLink()"><i class='bx bx-link' ></i></button>
-                                                    <button onclick="formatDoc('unlink')"><i class='bx bx-unlink' ></i></button>
-                                                    <button id="show-code" data-active="false">&lt;/&gt;</button>
-                                                </div>
-                                            </div>
-                                             <div id="content" contenteditable="true" spellcheck="false" name="content">
-                                                Lorem, ipsum.
-                                                </div>
-                                 <input type="hidden" id="bug_description" name="bug_description"> 
-                                        
-                                </div>
-                            </div>
-                            </div>
-                            </div>
-                            <!-- text editor end -->
-                            
-                            <div class="form-section">
-                                <h2 class="section-title"><i class="bi bi-paperclip"></i> Attachments</h2>
-                                
-                                <div class="mb-3">
-                                    <label for="uploaded_file" name="uploaded_file"></label>
-                                    <div class="file-upload">
-                                        <i class="bi bi-cloud-arrow-down-fill"></i>
-                                        <p><span>Select your image or file to upload in the box below</span></p>
-                                    </div>
-                                    
-                                    <input type="file" name="uploaded_file" class="form-control" value="" id="uploaded_file" placeholder="upload file">
-                                </div>
-                            </div>
-                            
-                            <div class="form-section">
-                                <h2 class="section-title"><i class="fas fa-user-tag"></i> Assignment</h2>
-                                
-                                <div class="row">
-                                    <div class="col-md-6 mb-3">
-                                        <label for="assign_to" class="form-label">Assign To Developer:</label>
-                                        <select id="assign_to"  class="form-select" required name="assign_to">
-                                            <option value="">-- Select Developer --</option>
-                                            {% for dev in developers %}
-                                            <option value="{{ dev.id }}">
-                                                {{ dev.username }}
-                                            </option>
-                                            {% endfor %}
-                                            
-                                        </select>
-                                    </div>
-                                    
-                                    <div class="col-md-6 mb-3">
-                                        <label for="severity" class="form-label">Bug Severity</label>
-                                        <select id="severity" class="form-select" name="severity" required>
-                                            <option value="">-- Select your bug weight --</option>
-                                            <option value="Low">Low</option>
-                                            <option value="Medium" selected>Medium</option>
-                                            <option value="High">High</option>
-                                            <option value="Critical">Critical</option>
-                                        </select>
-                                    </div>
-                                </div>
-                                
-                                <div class="row">
-                                    <div class="col-md-6 mb-3">
-                                        <label for="status" class="form-label">Status</label>
-                                        <select id="status" class="form-select" name="status" disabled>
-                                            <option value="Open" selected>Open</option>
-                                            <option value="In Progress">In Progress</option>
-                                            <option value="Resolved">Resolved</option>
-                                            <option value="Closed">Closed</option>
-                                        </select>
-                                    </div>
-                                </div>
-                            </div>
-                            
-                            <div class="form-section">
-                                <h2 class="section-title"><i class="fas fa-calendar-alt"></i> Dates</h2>
-                                
-                                <div class="row">
-                                    <div class="col-md-6 mb-3">
-                                        <label for="desired_date" class="form-label" name="desired_date">Desired Date</label>
-                                        <input type="date" id="desired_date" class="form-control" name="desired_date" required>
-                                    </div>
-                                </div>
-                            </div>
-                            
-                            <div class="form-section row">
-                                <div class="d-flex justify-content-start gap-4 form-actions col-6">
-                                    <button type="submit" class="btn btn-primary add-btn " id="submitBugReport" name="submit">
-                                        <i class="fas fa-plus me-1"></i> Upload Bug
-                                    </button>
-                                </div>
+                    <!-- Bug Report Title -->
+                    <div class="form-section">
+                        <h2 class="sub-title">Bug Report Form</h2>
+                        <div class="row mt-3">
+                            <div class="mb-3 col-md-6">
+                                <label for="bug_title" class="form-label">Bug Title</label>
+                                <input type="text" id="bug_title" class="form-control" placeholder="Enter bug title"
+                                    required name="bug_title" />
                             </div>
                         </div>
-                    </form>
+                    </div>
+
+                    <!-- Description (Text Editor) -->
+                    <div class="form-section">
+                        <label for="bug_description" class="form-label">
+                            Description (Describe your bug in actual behavior and expected behavior)
+                        </label>
+
+                        <div class="container mt-2">
+                            <div class="toolbar">
+                                <div class="head">
+                                    <input type="text" placeholder="Filename" id="filename" />
+                                    <select onchange="fileHandle(this.value);">
+                                        <option value="" hidden disabled selected>File save</option>
+                                        <option value="new">New file</option>
+                                        <option value="txt">Save as txt</option>
+                                        <option value="pdf">Save as pdf</option>
+                                    </select>
+
+                                    <select onchange="formatDoc('formatBlock', this.value);">
+                                        <option value="" hidden disabled selected>Format</option>
+                                        <option value="h1">Heading 1</option>
+                                        <option value="h2">Heading 2</option>
+                                        <option value="h3">Heading 3</option>
+                                        <option value="h4">Heading 4</option>
+                                        <option value="h5">Heading 5</option>
+                                        <option value="h6">Heading 6</option>
+                                        <option value="p">Paragraph</option>
+                                    </select>
+
+                                    <select onchange="formatDoc('fontSize', this.value);">
+                                        <option value="" hidden disabled selected>Font size</option>
+                                        <option value="1">Extra small</option>
+                                        <option value="2">Small</option>
+                                        <option value="3">Regular</option>
+                                        <option value="4">Medium</option>
+                                        <option value="5">Large</option>
+                                        <option value="6">Extra Large</option>
+                                        <option value="7">Big</option>
+                                    </select>
+                                </div>
+
+                                <div class="btn-toolbar">
+                                    <button type="button" onclick="formatDoc('undo', null, this)"><i
+                                            class="bx bx-undo"></i></button>
+                                    <button type="button" onclick="formatDoc('redo', null, this)"><i
+                                            class="bx bx-redo"></i></button>
+                                    <button type="button" onclick="formatDoc('bold', null, this)"><i
+                                            class="bx bx-bold"></i></button>
+                                    <button type="button" onclick="formatDoc('underline', null, this)"><i
+                                            class="bx bx-underline"></i></button>
+                                    <button type="button" onclick="formatDoc('italic', null, this)"><i
+                                            class="bx bx-italic"></i></button>
+                                    <button type="button" onclick="formatDoc('strikeThrough', null, this)"><i
+                                            class="bx bx-strikethrough"></i></button>
+                                    <button type="button" onclick="formatDoc('justifyLeft', null, this)"><i
+                                            class="bx bx-align-left"></i></button>
+                                    <button type="button" onclick="formatDoc('justifyCenter', null, this)"><i
+                                            class="bx bx-align-middle"></i></button>
+                                    <button type="button" onclick="formatDoc('justifyRight', null, this)"><i
+                                            class="bx bx-align-right"></i></button>
+                                    <button type="button" onclick="formatDoc('justifyFull', null, this)"><i
+                                            class="bx bx-align-justify"></i></button>
+                                    <button type="button" onclick="formatDoc('insertOrderedList', null, this)"><i
+                                            class="bx bx-list-ol"></i></button>
+                                    <button type="button" onclick="formatDoc('insertUnorderedList', null, this)"><i
+                                            class="bx bx-list-ul"></i></button>
+                                    <button type="button" onclick="addLink()"><i class="bx bx-link"></i></button>
+                                    <button type="button" onclick="formatDoc('unlink', null, this)"><i
+                                            class="bx bx-unlink"></i></button>
+                                    <button type="button" id="show-code" data-active="false">&lt;/&gt;</button>
+                                </div>
+                            </div>
+
+                            <div id="content" contenteditable="true" spellcheck="false">
+                                Lorem, ipsum.
+                            </div>
+
+                            <input type="hidden" id="bug_description" name="bug_description" />
+                        </div>
+                    </div>
+
+                    <!-- Attachments -->
+                    <div class="form-section">
+                        <h2 class="section-title"><i class="bi bi-paperclip"></i> Attachments</h2>
+                        <div class="mb-3">
+                            <label for="uploaded_file" class="form-label">Upload File</label>
+                            <div class="file-upload">
+                                <i class="bi bi-cloud-arrow-down-fill"></i>
+                                <p><span>Select your image or file to upload in the box below</span></p>
+                            </div>
+                            <input type="file" name="uploaded_file" class="form-control" id="uploaded_file"
+                                placeholder="upload file" />
+                        </div>
+                    </div>
+
+                    <!-- Assignment -->
+                    <div class="form-section">
+                        <h2 class="section-title"><i class="fas fa-user-tag"></i> Assignment</h2>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="assign_to" class="form-label">Assign To Developer:</label>
+                                <select id="assign_to" class="form-select" required name="assign_to">
+                                    <option value="">-- Select Developer --</option>
+                                    {% for dev in developers %}
+                                    <option value="{{ dev.id }}">{{ dev.username }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+                                <label for="severity" class="form-label">Bug Severity</label>
+                                <select id="severity" class="form-select" name="severity" required>
+                                    <option value="">-- Select your bug weight --</option>
+                                    <option value="Low">Low</option>
+                                    <option value="Medium" selected>Medium</option>
+                                    <option value="High">High</option>
+                                    <option value="Critical">Critical</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Dates -->
+                    <div class="form-section">
+                        <h2 class="section-title"><i class="fas fa-calendar-alt"></i> Dates</h2>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="desired_date" class="form-label">Desired Date</label>
+                                <input type="date" id="desired_date" class="form-control" name="desired_date"
+                                    required />
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Submit Button -->
+                    <div class="form-section">
+                        <div class="d-flex justify-content-start gap-4 form-actions">
+                            <button type="submit" class="btn btn-primary add-btn" id="submitBugReport" name="submit">
+                                <i class="fas fa-plus me-1"></i> Upload Bug
+                            </button>
+                        </div>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
-    {% endblock %}
+</div>
 
-  
-    {% block extra_js %}
-        <script src="{% static 'js/bugreport.js' %}"></script>
-        <script src="{% static 'js/texteditor.js' %}"></script>
-        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    {% endblock %}
+{% endblock %}
+
+
+{% block extra_js %}
+<script src="{% static 'js/bugreport.js' %}"></script>
+<script src="{% static 'js/texteditor.js' %}"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+{% endblock %}

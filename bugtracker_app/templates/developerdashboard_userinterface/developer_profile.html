@@ -1,0 +1,10 @@
+{% extends 'developerdashboard_userinterface/base_developerdash.html' %}
+{% load static %}
+
+{% block dev-content %}
+   <h3>Developer Dashboard Profile</h3>
+   <p><strong>Username:</strong> {{ username }}</p>
+   <p><strong>Email:</strong> {{ email }}</p>
+    <p><strong>Full Name:</strong> {{ name }}</p>
+
+   {% endblock %}

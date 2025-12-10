@@ -1,0 +1,54 @@
+.add-bug-btn {
+  background: #4361ee;
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 20px;
+}
+
+.table-container {
+  background: #fff;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th, td {
+  padding: 15px;
+  border-bottom: 1px solid #eee;
+  text-align: left;
+}
+
+.priority.high { background: #fff3e0; color: #ef6c00; padding: 4px 10px; border-radius: 12px; }
+.priority.medium { background: #e3f2fd; color: #4361ee; padding: 4px 10px; border-radius: 12px; }
+.priority.low { background: #e8f5e9; color: #2e7d32; padding: 4px 10px; border-radius: 12px; }
+
+.status.open { background: #ffebee; color: #c62828; padding: 4px 10px; border-radius: 12px; }
+.status.closed { background: #e8f5e9; color: #2e7d32; padding: 4px 10px; border-radius: 12px; }
+
+.btn {
+  border: none;
+  padding: 6px 10px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.btn-edit {
+  background: #e3f2fd;
+  color: #4361ee;
+}
+
+.btn-delete {
+  background: #ffebee;
+  color: #c62828;
+}

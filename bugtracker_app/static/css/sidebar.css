@@ -1,0 +1,110 @@
+/* Sidebar Styles */
+        .sidebar {
+            width: 250px;
+            background-color: white;
+            height: calc(100vh - var(--header-height));
+            position: relative;
+            top: var(--header-height);
+            z-index: 900;
+            transition: all 0.3s ease;
+            box-shadow: 3px 0 10px rgba(0, 0, 0, 0.05);
+            /* vertical scroll - value auto*/
+            overflow: hidden;
+            flex-shrink: 0;
+        }
+
+        .sidebar-toggle-btn {
+            position: relative;
+            top: 3%;
+            right: -195px;
+            transform: translateY(-50%);
+            z-index: 1000;
+            cursor: pointer;
+            font-size: 2rem;
+            color: white;
+            background-color: var(--accent-color);
+            border-radius: 50%;
+            width: 35px;
+            height: 35px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .sidebar-toggle-btn:hover {
+            transform: translateY(-50%) scale(1.1);
+        }
+
+        @media (max-width: 992px) {
+            .sidebar {
+                width: 200px;
+            }
+            .sidebar-toggle-btn{
+                width: 30px;
+                height: 30px;
+                top: 3%;
+                right: -165px;
+            }
+        }
+        @media (max-width: 300px) {
+            .sidebar {
+                width: 130px;
+            }
+            .sidebar-toggle-btn{
+                width: 30px;
+                height: 30px;
+                
+            }
+
+        }
+        
+        .sidebar-collapsed {
+            width:100px;
+        }
+        
+        .sidebar-collapsed .sidebar-text {
+            display: none;
+        }
+
+        .sidebar-collapsed  .sidebar-toggle-btn {
+             left: 0;
+        }
+        
+        /* .sidebar-collapsed .logo-text {
+            display: none;
+        }
+         */
+        .sidebar-item {
+            padding: 0.75rem 1rem;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+            color: #495057;
+            transition: all 0.3s;
+            margin-bottom: 5px;
+        }
+        
+        .sidebar-item:hover, .sidebar-item.active {
+            background-color: #0d6efd;
+            color: white !important;
+        }
+        
+        .sidebar-item .icon {
+            margin-right: 15px;
+            font-size: 1.25rem;
+            min-width: 24px;
+            text-align: center;
+        }
+        
+        .sidebar-bottom {
+            margin-top: auto;
+            padding-bottom: 20px;
+        }
+
+        .sidebar-text {
+            padding: 0 10px;
+            font-size: 1rem;
+        }

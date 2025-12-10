@@ -1,0 +1,55 @@
+{% extends 'admindashboard_userinterface/admin_dashboard.html' %}
+{% load static %}
+
+{% block title %}Bug Management{% endblock %}
+{% block active_bugs %}active{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/bugManagement.css' %}"> 
+{% endblock %}
+
+{% block content %}
+<h1 class="page-title">Bug Management</h1>
+
+<a href="{% url 'bug_list' %}" class="add-bug-btn">
+    <i class="fas fa-plus"></i> Validation
+</a>
+
+<div class="table-container">
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th><th>Title</th>
+                <th>Severity</th><th>Status</th><th>Assignee</th><th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for bug in bugs %}
+            <tr>
+                <td>#{{ bug.id }}</td>
+                <td>{{ bug.title }}</td>
+                <td><span class="priority {{ bug.severity|lower }}">{{ bug.severity }}</span></td>
+                <td><span class="status {{ bug.status|lower|cut:" " }}">{{ bug.status }}</span></td>
+                <td>{{ bug.assigned_to.username|default:"Unassigned" }}</td>
+                <td>
+                    
+                    <form method="POST" action="{% url 'bug_delete' bug.id %}" style="display:inline;">
+                        {% csrf_token %}
+                        <button class="btn btn-delete" onclick="return confirm('Are you sure you want to delete this bug: {{ bug.title }}?')">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </form>
+                </td>
+            </tr>
+            {% empty %}
+            <tr><td colspan="6" style="text-align:center;">No bugs found.</td></tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'js/bugManagement.js' %}"></script>
+{% endblock %}
+<!-- <a href="{% url 'bug_edit' bug.id %}" class="btn btn-edit"><i class="fas fa-edit"></i></a> -->
