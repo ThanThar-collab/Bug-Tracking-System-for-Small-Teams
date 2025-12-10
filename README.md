@@ -2,7 +2,7 @@
 
 This is school projects with my classmates. This is the user-friendly bug tracking system that I actively participated in as full stack
 
-Final report of this project can be found [here] ([text](c:/Users/User/OneDrive/Documents/P_16_Final_Report_BugTrackingSystemForSmallTeams_PDF.pdf))
+Final report of this project can be found [Bug-Tracking-System-Final-Report-PDF](https://drive.google.com/file/d/1qZR6NH6aGNjy8gFY37GU7_EVUpN5KDk0/view?usp=sharing)
 
 Project Video Clip:
 
