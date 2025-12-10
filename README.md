@@ -8,4 +8,4 @@ Project Video Clip:
 
 **Client View And Developer View**
 
-<video src="<video controls src="https://drive.google.com/file/d/1xctJ8oo1Euv8ijdKSpiHQcorUaGkOVmJ/view?usp=sharing" title="Title"></video>" width="320" height="240" controls></video>
+<iframe width="560" height="315" src="https://drive.google.com/file/d/1xctJ8oo1Euv8ijdKSpiHQcorUaGkOVmJ/view?usp=sharing" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
