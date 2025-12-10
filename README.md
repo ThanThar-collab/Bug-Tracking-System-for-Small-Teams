@@ -5,13 +5,13 @@ This is school projects with my classmates. This is the user-friendly bug tracki
 ---
 
 **Final report of this project can be found**[Bug-Tracking-System-Final-Report-PDF](https://drive.google.com/file/d/1qZR6NH6aGNjy8gFY37GU7_EVUpN5KDk0/view?usp=sharing)
-<br><br>
+<br><br><br>
 **Project Video Clip:**
-<br>
+<br><br>
 **_Client View And Developer View_**
 
 <iframe width="560" height="315" src="https://drive.google.com/file/d/1xctJ8oo1Euv8ijdKSpiHQcorUaGkOVmJ/view?usp=sharing" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-<br><br>
+<br><br><br>
 **_Admin View_**
 
 <iframe width="560" height="315" src="https://drive.google.com/file/d/1fqRR96TFDXFVeamNIkcWQHVlokLZt97P/view?usp=sharing" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
